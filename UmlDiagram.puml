@@ -1,0 +1,119 @@
+@startuml
+
+' Gestión de Conferencias
+class Conferencia {
+    - String nombre
+    - Date fechaInicio
+    - Date fechaFin
+    - List<Sesion> sesiones
+    - List<Usuario> comitePrograma
+    + crearConferencia(nombre, fechaInicio, fechaFin)
+    + editarConferencia(nombre, fechaInicio, fechaFin)
+}
+
+class Sesion {
+    - String tipo
+    - String tema
+    - Date fechaLimite
+    - List<Articulo> articulos
+    + crearSesion(tipo, tema, fechaLimite)
+    + editarSesion(tipo, tema, fechaLimite)
+}
+
+' Gestión de Usuarios
+class Usuario {
+    - String nombreCompleto
+    - String afiliacion
+    - String email
+    - String contrasena
+    - List<Rol> roles
+    + registrarse(nombreCompleto, afiliacion, email, contrasena)
+    + autenticarse(email, contrasena)
+}
+
+class Autor {
+    + enviarArticulo(articulo, sesion)
+}
+
+class Revisor {
+    + expresarInteres(articulo, interes)
+    + emitirRevision(articulo, recomendacion, puntaje)
+}
+
+class Chair {
+    + asignarRevisores(articulo, revisores)
+    + seleccionarArticulos()
+}
+
+' Gestión de Artículos
+class Articulo {
+    - String titulo
+    - String tipo
+    - String abstract
+    - String archivoAdjunto
+    - String url
+    - List<Revision> revisiones
+    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+    + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+}
+
+class Revision {
+    - Revisor revisor
+    - String recomendacion
+    - int puntaje
+    + emitirRevision(revisor, recomendacion, puntaje)
+}
+
+' Punto de Entrada
+class ControladorPrincipal {
+    + iniciarAplicacion()
+    + gestionarConferencias()
+    + gestionarUsuarios()
+    + gestionarSesiones()
+    + gestionarArticulos()
+}
+
+' Patrones de Diseño
+class Singleton {
+    - static instance: Singleton
+    + static getInstance()
+}
+
+class Factory {
+    + crearUsuario(tipo, nombreCompleto, afiliacion, email, contrasena)
+    + crearArticulo(tipo, titulo, abstract, archivoAdjunto, url)
+}
+
+class Observer {
+    - List<Observer> observers
+    + attach(observer)
+    + detach(observer)
+    + notify()
+}
+
+class Strategy {
+    + seleccionarArticulos(criterio)
+}
+
+' Relaciones
+ControladorPrincipal "1" -- "1" Conferencia
+ControladorPrincipal "1" -- "1" Usuario
+ControladorPrincipal "1" -- "1" Sesion
+ControladorPrincipal "1" -- "1" Articulo
+Conferencia "1" -- "0..*" Sesion
+Sesion "0..*" -- "0..*" Articulo
+Conferencia "1" -- "0..*" Usuario
+Usuario "1" -- "0..*" Rol
+Articulo "0..*" -- "0..*" Revision
+Revision "1" -- "1" Revisor
+Chair "1" -- "0..*" Articulo : asigna
+Observer <|-- Articulo
+Strategy <|-- CriterioSeleccion
+Factory <|-- Usuario
+Factory <|-- Articulo
+Singleton <|-- Conferencia
+Usuario <|-- Autor
+Usuario <|-- Revisor
+Usuario <|-- Chair
+
+@enduml
