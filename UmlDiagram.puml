@@ -73,6 +73,27 @@ class ControladorPrincipal {
     + gestionarArticulos()
 }
 
+' Servicios
+class ServicioConferencia {
+    + crearConferencia(nombre, fechaInicio, fechafin)
+    + editarConferencia(nombre, fechaInicio, fechaFin)
+}
+
+class ServicioUsuario {
+    + registrarse(nombreCompleto, afiliacion, email, contrasena)
+    + autenticarse(email, contrasena)
+}
+
+class ServicioSesion {
+    + crearSesion(tipo, tema, fechaLimite)
+    + editarSesion(tipo, tema, fechaLimite)
+}
+
+class ServicioArticulo {
+    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+    + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+}
+
 ' Patrones de Diseño
 class Singleton {
     - static instance: Singleton
@@ -96,10 +117,14 @@ class Strategy {
 }
 
 ' Relaciones
-ControladorPrincipal "1" -- "1" Conferencia
-ControladorPrincipal "1" -- "1" Usuario
-ControladorPrincipal "1" -- "1" Sesion
-ControladorPrincipal "1" -- "1" Articulo
+ControladorPrincipal "1" -- "1" ServicioConferencia
+ControladorPrincipal "1" -- "1" ServicioUsuario
+ControladorPrincipal "1" -- "1" ServicioSesion
+ControladorPrincipal "1" -- "1" ServicioArticulo
+ServicioConferencia "1" -- "0..*" Conferencia
+ServicioSesion "1" -- "0..*" Sesion
+ServicioUsuario "1" -- "0..*" Usuario
+ServicioArticulo "1" -- "0..*" Articulo
 Conferencia "1" -- "0..*" Sesion
 Sesion "0..*" -- "0..*" Articulo
 Conferencia "1" -- "0..*" Usuario
