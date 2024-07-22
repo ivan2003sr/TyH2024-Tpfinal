@@ -1,136 +1,173 @@
 @startuml Diagrama
 
-' Enumaraciones
-enum tipoSesion {
-    REGULAR 
-    WORKSHOP
-    POSTERS
+package enums{
+    enum tipoSesion {
+        REGULAR
+        WORKSHOP
+        POSTERS
+
+    }
+
+
+    enum TipoArticulo {
+        REGULAR
+        POSTERS
+    }
+}
+
+package gestionConferencias{
+    class Conferencia {
+        - String nombre
+        - Date fechaInicio
+        - Date fechaFin
+        - List<Sesion> sesiones
+        - List<Usuario> comitePrograma
+        + crearConferencia(nombre, fechaInicio, fechaFin)
+        + editarConferencia(nombre, fechaInicio, fechaFin)
+    }
+
+    class Sesion {
+        - String tipo
+        - String tema
+        - Date fechaLimite
+        - List<Articulo> articulos
+        + crearSesion(tipo, tema, fechaLimite)
+        + editarSesion(tipo, tema, fechaLimite)
+        + agregarArticulo(articulo)
+    }
+
+    class Singleton {
+        - static instance: Singleton
+        + static getInstance()
+    }
+
 
 }
 
-enum TipoArticulo {
-    REGULAR 
-    POSTERS
-}
+package gestionUsuarios{
+    class Usuario {
+        - String nombreCompleto
+        - String afiliacion
+        - String email
+        - String contrasena
+        - List<Rol> roles
+        + registrarse(nombreCompleto, afiliacion, email, contrasena)
+        + autenticarse(email, contrasena)
+    }
 
-' Gestión de Conferencias
-class Conferencia {
-    - String nombre
-    - Date fechaInicio
-    - Date fechaFin
-    - List<Sesion> sesiones
-    - List<Usuario> comitePrograma
-    + crearConferencia(nombre, fechaInicio, fechaFin)
-    + editarConferencia(nombre, fechaInicio, fechaFin)
-}
+    class FactoryUsuario {
+        + crearUsuario(tipo, nombreCompleto, afiliacion, email, contrasena)
 
-class Sesion {
-    - String tipo
-    - String tema
-    - Date fechaLimite
-    - List<Articulo> articulos
-    + crearSesion(tipo, tema, fechaLimite)
-    + editarSesion(tipo, tema, fechaLimite)
-    + agregarArticulo(articulo)
-}
+    }
 
-' Gestión de Usuarios
-class Usuario {
-    - String nombreCompleto
-    - String afiliacion
-    - String email
-    - String contrasena
-    - List<Rol> roles
-    + registrarse(nombreCompleto, afiliacion, email, contrasena)
-    + autenticarse(email, contrasena)
-}
+    class Rol {
+        - String nombre
+    }
 
-class Rol {
-    - String nombre
-}
+    class Autor {
+        + enviarArticulo(articulo, sesion)
+        + modificarArticulo (articulo)
+    }
 
-class Autor {
-    + enviarArticulo(articulo, sesion)
-    + modificarArticulo (articulo)
-}
+    class Revisor {
+        + expresarInteres(articulo, interes)
+        + emitirRevision(articulo, recomendacion, puntaje)
+    }
 
-class Revisor {
-    + expresarInteres(articulo, interes)
-    + emitirRevision(articulo, recomendacion, puntaje)
-}
+    class Chair {
+        + asignarRevisores(articulo, revisores)
+        + seleccionarArticulos(criterio)
+    }
 
-class Chair {
-    + asignarRevisores(articulo, revisores)
-    + seleccionarArticulos(criterio)
-}
-
-' Gestión de Artículos
-class Articulo {
-    - String titulo
-    - String tipo
-    - String abstract
-    - String archivoAdjunto
-    - String url
-    - List<Revision> revisiones
-    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
-    + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
-    + validar()
-}
-
-class ArticuloRegular  {
-    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto)
-    + validar()
-}
-
-class ArticuloPoster  {
-    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
-    + validar()
-}
-
-
-class Revision {
-    - Revisor revisor
-    - String recomendacion
-    - int puntaje
-    + emitirRevision(revisor, recomendacion, puntaje)
-    + validarPuntaje(puntaje)
 }
 
 
 
-' Proceso de Recepción
-class ProcesoRecepcion {
-    + validarArticulo(articulo)
-    + rechazarArticulo(articulo)
+package gestionArticulos{
+    class Articulo {
+        - String titulo
+        - String tipo
+        - String abstract
+        - String archivoAdjunto
+        - String url
+        - List<Revision> revisiones
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validar()
+    }
+
+    class ArticuloRegular  {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto)
+        + validar()
+    }
+
+    class ArticuloPoster  {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validar()
+    }
+
+    class FactoryArticulo {
+        + crearArticulo(tipo, titulo, abstract, archivoAdjunto, url)
+    }
+
+
+    class Revision {
+        - Revisor revisor
+        - String recomendacion
+        - int puntaje
+        + emitirRevision(revisor, recomendacion, puntaje)
+        + validarPuntaje(puntaje)
+    }
+
+    class Observer {
+        - List<Observer> observers
+        + attach(observer)
+        + detach(observer)
+        + notify()
+    }
+
 }
 
-' Proceso de Bidding
-class ProcesoBidding {
-    + expresarInteres(revisor, articulo, interes)
-    + asignarRevisores(articulo)
+
+package procesos{
+    class ProcesoRecepcion {
+        + validarArticulo(articulo)
+        + rechazarArticulo(articulo)
+    }
+
+    ' Proceso de Bidding
+    class ProcesoBidding {
+        + expresarInteres(revisor, articulo, interes)
+        + asignarRevisores(articulo)
+    }
+
+    ' Proceso de Revisión
+    class ProcesoRevision {
+        + recibirRevision(revisor, articulo, revision)
+    }
+
+    ' Proceso de Selección
+    class ProcesoSeleccion {
+        + seleccionarArticulos(sesion, criterio)
+    }
 }
 
-' Proceso de Revisión
-class ProcesoRevision {
-    + recibirRevision(revisor, articulo, revision)
-}
+package criteriosSeleccion{
+    interface CriterioSeleccion {
+        + seleccionar(articulos)
+    }
 
-' Proceso de Selección
-class ProcesoSeleccion {
-    + seleccionarArticulos(sesion, criterio)
-}
+    class CorteFijo  {
+        + seleccionar(articulos)
+    }
 
-' Criterios de Selección
-interface CriterioSeleccion {
-    + seleccionar(articulos)
-}
+    class Mejores  {
+        + seleccionar(articulos)
+    }
+    class Strategy {
+        + seleccionarArticulos(criterio)
+    }
 
-class CorteFijo  {
-    + seleccionar(articulos)
-}
-
-class Mejores  {
-    + seleccionar(articulos)
 }
 
 ' Punto de Entrada
@@ -142,50 +179,30 @@ class ControladorPrincipal {
     + gestionarArticulos()
 }
 
-' Servicios
-class ServicioConferencia {
-    + crearConferencia(nombre, fechaInicio, fechafin)
-    + editarConferencia(nombre, fechaInicio, fechaFin)
-}
+package servicios {
+    class ServicioConferencia {
+        + crearConferencia(nombre, fechaInicio, fechafin)
+        + editarConferencia(nombre, fechaInicio, fechaFin)
+    }
 
 
 
-class ServicioUsuario {
-    + registrarse(nombreCompleto, afiliacion, email, contrasena)
-    + autenticarse(email, contrasena)
-}
+    class ServicioUsuario {
+        + registrarse(nombreCompleto, afiliacion, email, contrasena)
+        + autenticarse(email, contrasena)
+    }
 
-class ServicioSesion {
-    + crearSesion(tipo, tema, fechaLimite)
-    + editarSesion(tipo, tema, fechaLimite)
-}
+    class ServicioSesion {
+        + crearSesion(tipo, tema, fechaLimite)
+        + editarSesion(tipo, tema, fechaLimite)
+    }
 
-class ServicioArticulo {
-    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
-    + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
-    + validarArticulo(articulo)
-}
+    class ServicioArticulo {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validarArticulo(articulo)
+    }
 
-' Patrones de Diseño
-class Singleton {
-    - static instance: Singleton
-    + static getInstance()
-}
-
-class Factory {
-    + crearUsuario(tipo, nombreCompleto, afiliacion, email, contrasena)
-    + crearArticulo(tipo, titulo, abstract, archivoAdjunto, url)
-}
-
-class Observer {
-    - List<Observer> observers
-    + attach(observer)
-    + detach(observer)
-    + notify()
-}
-
-class Strategy {
-    + seleccionarArticulos(criterio)
 }
 
 ' Relaciones
@@ -206,8 +223,8 @@ Revision "1" -- "1" Revisor
 Chair "1" -- "0..*" Articulo : asigna
 Observer <|-- Articulo
 Strategy --|> CriterioSeleccion
-Factory <|-- Usuario
-Factory <|-- Articulo
+FactoryUsuario <|-- Usuario
+FactoryArticulo <|-- Articulo
 Singleton <|-- Conferencia
 Usuario <|-- Autor
 Usuario <|-- Revisor
