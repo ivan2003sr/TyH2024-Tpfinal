@@ -1,4 +1,17 @@
-@startuml
+@startuml Diagrama
+
+' Enumaraciones
+enum tipoSesion {
+    REGULAR 
+    WORKSHOP
+    POSTERS
+
+}
+
+enum TipoArticulo {
+    REGULAR 
+    POSTERS
+}
 
 ' Gestión de Conferencias
 class Conferencia {
@@ -18,6 +31,7 @@ class Sesion {
     - List<Articulo> articulos
     + crearSesion(tipo, tema, fechaLimite)
     + editarSesion(tipo, tema, fechaLimite)
+    + agregarArticulo(articulo)
 }
 
 ' Gestión de Usuarios
@@ -31,8 +45,13 @@ class Usuario {
     + autenticarse(email, contrasena)
 }
 
+class Rol {
+    - String nombre
+}
+
 class Autor {
     + enviarArticulo(articulo, sesion)
+    + modificarArticulo (articulo)
 }
 
 class Revisor {
@@ -42,7 +61,7 @@ class Revisor {
 
 class Chair {
     + asignarRevisores(articulo, revisores)
-    + seleccionarArticulos()
+    + seleccionarArticulos(criterio)
 }
 
 ' Gestión de Artículos
@@ -55,13 +74,63 @@ class Articulo {
     - List<Revision> revisiones
     + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
     + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+    + validar()
 }
+
+class ArticuloRegular  {
+    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto)
+    + validar()
+}
+
+class ArticuloPoster  {
+    + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+    + validar()
+}
+
 
 class Revision {
     - Revisor revisor
     - String recomendacion
     - int puntaje
     + emitirRevision(revisor, recomendacion, puntaje)
+    + validarPuntaje(puntaje)
+}
+
+
+
+' Proceso de Recepción
+class ProcesoRecepcion {
+    + validarArticulo(articulo)
+    + rechazarArticulo(articulo)
+}
+
+' Proceso de Bidding
+class ProcesoBidding {
+    + expresarInteres(revisor, articulo, interes)
+    + asignarRevisores(articulo)
+}
+
+' Proceso de Revisión
+class ProcesoRevision {
+    + recibirRevision(revisor, articulo, revision)
+}
+
+' Proceso de Selección
+class ProcesoSeleccion {
+    + seleccionarArticulos(sesion, criterio)
+}
+
+' Criterios de Selección
+interface CriterioSeleccion {
+    + seleccionar(articulos)
+}
+
+class CorteFijo  {
+    + seleccionar(articulos)
+}
+
+class Mejores  {
+    + seleccionar(articulos)
 }
 
 ' Punto de Entrada
@@ -79,6 +148,8 @@ class ServicioConferencia {
     + editarConferencia(nombre, fechaInicio, fechaFin)
 }
 
+
+
 class ServicioUsuario {
     + registrarse(nombreCompleto, afiliacion, email, contrasena)
     + autenticarse(email, contrasena)
@@ -92,6 +163,7 @@ class ServicioSesion {
 class ServicioArticulo {
     + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
     + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+    + validarArticulo(articulo)
 }
 
 ' Patrones de Diseño
@@ -133,12 +205,23 @@ Articulo "0..*" -- "0..*" Revision
 Revision "1" -- "1" Revisor
 Chair "1" -- "0..*" Articulo : asigna
 Observer <|-- Articulo
-Strategy <|-- CriterioSeleccion
+Strategy --|> CriterioSeleccion
 Factory <|-- Usuario
 Factory <|-- Articulo
 Singleton <|-- Conferencia
 Usuario <|-- Autor
 Usuario <|-- Revisor
 Usuario <|-- Chair
+ArticuloRegular --|> Articulo
+ArticuloPoster --|> Articulo
+Articulo "0..1" -- "1" ProcesoRecepcion : usa
+Articulo "0..1" -- "1" ProcesoBidding : usa
+Articulo "0..1" -- "1" ProcesoRevision : usa
+Articulo "0..1" -- "1" ProcesoSeleccion : usa
+Articulo "1" -- "1" TipoArticulo : tiene
+Sesion "1" -- "1" tipoSesion : tiene
+ProcesoSeleccion "1" -- "0..*" CriterioSeleccion : usa
+CriterioSeleccion <|-- CorteFijo
+CriterioSeleccion <|-- Mejores
 
 @enduml
