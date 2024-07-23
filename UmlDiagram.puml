@@ -1,0 +1,245 @@
+@startuml Diagrama
+
+package enums{
+    enum TipoSesion {
+        REGULAR
+        WORKSHOP
+        POSTERS
+
+    }
+
+
+    enum TipoArticulo {
+        REGULAR
+        POSTERS
+    }
+}
+
+package gestionConferencias{
+    class Conferencia {
+        - String nombre
+        - Date fechaInicio
+        - Date fechaFin
+        - List<Sesion> sesiones
+        - List<Usuario> comitePrograma
+        + crearConferencia(nombre, fechaInicio, fechaFin)
+        + editarConferencia(nombre, fechaInicio, fechaFin)
+    }
+
+    class Sesion {
+        - String tipo
+        - String tema
+        - Date fechaLimite
+        - List<Articulo> articulos
+        + crearSesion(tipo, tema, fechaLimite)
+        + editarSesion(tipo, tema, fechaLimite)
+        + agregarArticulo(articulo)
+    }
+
+    class Singleton {
+        - static instance: Singleton
+        + static getInstance()
+    }
+
+
+}
+
+package gestionUsuarios{
+    class Usuario {
+        - String nombreCompleto
+        - String afiliacion
+        - String email
+        - String contrasena
+        - List<Rol> roles
+        + registrarse(nombreCompleto, afiliacion, email, contrasena)
+        + autenticarse(email, contrasena)
+    }
+
+    class FactoryUsuario {
+        + crearUsuario(tipo, nombreCompleto, afiliacion, email, contrasena)
+
+    }
+
+    class Rol {
+        - String nombre
+    }
+
+    class Autor {
+        + enviarArticulo(articulo, sesion)
+        + modificarArticulo (articulo)
+    }
+
+    class Revisor {
+        + expresarInteres(articulo, interes)
+        + emitirRevision(articulo, recomendacion, puntaje)
+    }
+
+    class Chair {
+        + asignarRevisores(articulo, revisores)
+        + seleccionarArticulos(criterio)
+    }
+
+}
+
+
+
+package gestionArticulos{
+    class Articulo {
+        - String titulo
+        - String tipo
+        - String abstract
+        - String archivoAdjunto
+        - String url
+        - List<Revision> revisiones
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validar()
+    }
+
+    class ArticuloRegular  {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto)
+        + validar()
+         + validarAbstract() : void
+    }
+
+    class ArticuloPoster  {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validar()
+    }
+
+    class FactoryArticulo {
+        + crearArticulo(tipo, titulo, abstract, archivoAdjunto, url)
+    }
+
+
+    class Revision {
+        - Revisor revisor
+        - String recomendacion
+        - int puntaje
+        + emitirRevision(revisor, recomendacion, puntaje)
+        + validarPuntaje(puntaje)
+    }
+
+    class Observer {
+        - List<Observer> observers
+        + attach(observer)
+        + detach(observer)
+        + notify()
+    }
+
+}
+
+
+package procesos{
+    class ProcesoRecepcion {
+        + validarArticulo(articulo)
+        + rechazarArticulo(articulo)
+    }
+
+    ' Proceso de Bidding
+    class ProcesoBidding {
+        + expresarInteres(revisor, articulo, interes)
+        + asignarRevisores(articulo)
+    }
+
+    ' Proceso de Revisión
+    class ProcesoRevision {
+        + recibirRevision(revisor, articulo, revision)
+    }
+
+    ' Proceso de Selección
+    class ProcesoSeleccion {
+        + seleccionarArticulos(sesion, criterio)
+    }
+}
+
+package criteriosSeleccion{
+    interface CriterioSeleccion {
+        + seleccionar(articulos)
+    }
+
+    class CorteFijo  {
+        + seleccionar(articulos)
+    }
+
+    class Mejores  {
+        + seleccionar(articulos)
+    }
+    class Strategy {
+        + seleccionarArticulos(criterio)
+    }
+
+}
+
+' Punto de Entrada
+class ControladorPrincipal {
+    + iniciarAplicacion()
+    + gestionarConferencias()
+    + gestionarUsuarios()
+    + gestionarSesiones()
+    + gestionarArticulos()
+}
+
+package servicios {
+    class ServicioConferencia {
+        + crearConferencia(nombre, fechaInicio, fechafin)
+        + editarConferencia(nombre, fechaInicio, fechaFin)
+    }
+
+
+
+    class ServicioUsuario {
+        + registrarse(nombreCompleto, afiliacion, email, contrasena)
+        + autenticarse(email, contrasena)
+    }
+
+    class ServicioSesion {
+        + crearSesion(tipo, tema, fechaLimite)
+        + editarSesion(tipo, tema, fechaLimite)
+    }
+
+    class ServicioArticulo {
+        + enviarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + modificarArticulo(titulo, tipo, abstract, archivoAdjunto, url)
+        + validarArticulo(articulo)
+    }
+
+}
+
+' Relaciones
+ControladorPrincipal "1" -- "1" ServicioConferencia : gestiona
+ControladorPrincipal "1" -- "1" ServicioUsuario : gestiona
+ControladorPrincipal "1" -- "1" ServicioSesion : gestiona
+ControladorPrincipal "1" -- "1" ServicioArticulo : gestiona
+ServicioConferencia "1" -- "0..*" Conferencia : crea/edita
+ServicioSesion "1" -- "0..*" Sesion : crea/edita
+ServicioUsuario "1" -- "0..*" Usuario : registra/autentica
+ServicioArticulo "1" -- "0..*" Articulo : crea/edita
+Conferencia "1" -- "0..*" Sesion : tiene
+Sesion "0..*" -- "0..*" Articulo : contiene
+Conferencia "1" -- "0..*" Usuario : miembroComité
+Usuario "1" -- "0..*" Rol : tiene
+Articulo "0..*" -- "0..*" Revision : tiene
+Revision "1" -- "1" Revisor : emitida por
+Chair "1" -- "0..*" Articulo : asigna/revisa
+Observer <|-- Articulo : observa
+Strategy --|> CriterioSeleccion : usa
+FactoryUsuario <|-- Usuario : crea
+FactoryArticulo <|-- Articulo : crea
+Singleton <|-- Conferencia : instancia unica
+Usuario <|-- Autor : es
+Usuario <|-- Revisor : es
+Usuario <|-- Chair :es
+ArticuloRegular --|> Articulo : hereda
+ArticuloPoster --|> Articulo : hereda
+Articulo "0..1" -- "1" ProcesoRecepcion : pasa por 
+Articulo "0..1" -- "1" ProcesoBidding : pasa por
+Articulo "0..1" -- "1" ProcesoRevision : pasa por 
+Articulo "0..1" -- "1" ProcesoSeleccion : pasa por 
+Articulo "1" -- "1" TipoArticulo : tiene tipo
+Sesion "1" -- "1" TipoSesion : tiene tipo
+ProcesoSeleccion "1" -- "0..*" CriterioSeleccion : usa 
+CriterioSeleccion <|-- CorteFijo : implementa
+CriterioSeleccion <|-- Mejores : implementa
+
+@enduml
