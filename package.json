@@ -2,7 +2,7 @@
   "name": "tyh2024-tpfinal",
   "version": "1.0.0",
   "description": "Trabajo práctico final de Técnicas y Herramientas, año 2024.",
-  "main": "src/ControladorPrincipal.js",
+  "main": "src/index.js",
   "directories": {
     "test": "tests"
   },

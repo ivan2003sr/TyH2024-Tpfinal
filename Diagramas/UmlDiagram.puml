@@ -19,7 +19,7 @@ abstract class Sesion {
     - deadline: Date
     - numeroMaximoArticulosAceptados: int
     - tipo: TipoSesion
-   + setMetodoSeleccion(metodo: MetodoSeleccion, tipoArticulo: TipoArticulo): void
+    + setMetodoSeleccion(metodo: MetodoSeleccion, tipoArticulo: TipoArticulo): void
     + seleccionarArticulos(): void
 }
 
@@ -124,7 +124,6 @@ Articulo "1" -- "0..*" Bid : recibe
 Bid "0..*" -- "1" Usuario : ofrece
 Articulo "1" -- "3" Usuario : revisores
 Sesion *-- MetodoSeleccion : usa
-Sesion "1" -- "1" TipoSesion
 SesionWorkshop "1" -- "1" MetodoSeleccion : usaRegular
 SesionWorkshop "1" -- "1" MetodoSeleccion : usaPoster
 Articulo "1" -- "0..*" Usuario : observers

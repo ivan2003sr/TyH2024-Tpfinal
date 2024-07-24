@@ -4,8 +4,11 @@ Trabajo práctico final de Técnicas y Herramientas, año 2024.
 # Patrones utilizados:
 
 Los patrones utilizados son:
-Singleton (Para garantizar que solo exista una instancia del sistema de conferencias en ejecución.)
-Observer: para notificar a los observadores sobre cambios en el estado del un artículo (cuando se envía, modifica, revisa, etc).
-Strategy: Para implementar los diferentes criterios de selección de artículos en el proceso de selección.
-Factory: Para crear instancias de "usuario" y "artículo". (Factoría de Artículos y Factoría de Usuarios).
-Se decidió, para una mayor claridad en el código, que las clases que implementen un determinado patrón, tendrán como nombre ese patrón.
+Observer: "Artículo" actúa como el sujeto observable, "Usuario" como el observador. (métodos addObserver() y notifyObservers() en Artículo)
+
+Strategy: MetodoSelección es la interfaz que define la estrategia de selección de artículos. las implementaciones concretas de estrategias de selección son MetodoSeleccionCorteFijo y MetodoSeleccionMejores.
+Sesión y sus sublcaes usan el método "setMetodoSeleccion(metodo: MetodoSeleccion, tipoArticulo: TipoArticulo) para configurar la estrategia de selección.
+
+Factory: "Conferencia" actúa como una fábrica que crea instancias de "Sesion" utilizando el método crearSesion(tipo: TipoSesion)
+
+Composite: La relación entre "Sesion" y "Articulo" donde una sesión puede contener múltimples artículos y se puede manejar de manera uniforme.
