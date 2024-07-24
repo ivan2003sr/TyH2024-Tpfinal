@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1721848940024" clover="3.2.0">
+  <project timestamp="1721848940025" name="All files">
+    <metrics statements="110" coveredstatements="82" conditionals="34" coveredconditionals="18" methods="28" coveredmethods="14" elements="172" coveredelements="114" complexity="0" loc="110" ncloc="110" packages="1" files="11" classes="11"/>
+    <file name="Articulo.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\Articulo.js">
+      <metrics statements="22" coveredstatements="18" conditionals="14" coveredconditionals="11" methods="6" coveredmethods="3"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="5" count="6" type="cond" truecount="5" falsecount="0"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="8" count="5" type="stmt"/>
+      <line num="9" count="5" type="stmt"/>
+      <line num="10" count="5" type="stmt"/>
+      <line num="11" count="5" type="stmt"/>
+      <line num="12" count="5" type="stmt"/>
+      <line num="13" count="5" type="stmt"/>
+      <line num="14" count="5" type="stmt"/>
+      <line num="16" count="5" type="cond" truecount="4" falsecount="0"/>
+      <line num="17" count="2" type="stmt"/>
+      <line num="18" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="21" count="2" type="stmt"/>
+      <line num="26" count="2" type="stmt"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="34" count="2" type="stmt"/>
+      <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="39" count="0" type="stmt"/>
+      <line num="41" count="0" type="stmt"/>
+      <line num="46" count="1" type="stmt"/>
+    </file>
+    <file name="ArticuloPoster.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\ArticuloPoster.js">
+      <metrics statements="5" coveredstatements="5" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+    </file>
+    <file name="ArticuloRegular.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\ArticuloRegular.js">
+      <metrics statements="5" coveredstatements="5" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="7" count="3" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+    </file>
+    <file name="Conferencia.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\Conferencia.js">
+      <metrics statements="19" coveredstatements="19" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="1" type="stmt"/>
+      <line num="10" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+      <line num="16" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="18" count="1" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="25" count="1" type="stmt"/>
+      <line num="27" count="1" type="stmt"/>
+      <line num="29" count="3" type="stmt"/>
+      <line num="30" count="3" type="stmt"/>
+      <line num="34" count="1" type="stmt"/>
+    </file>
+    <file name="Rol.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\Rol.js">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="3" count="3" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+    </file>
+    <file name="Sesion.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\Sesion.js">
+      <metrics statements="13" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="7" count="3" type="cond" truecount="1" falsecount="1"/>
+      <line num="8" count="0" type="stmt"/>
+      <line num="10" count="3" type="stmt"/>
+      <line num="11" count="3" type="stmt"/>
+      <line num="12" count="3" type="stmt"/>
+      <line num="13" count="3" type="stmt"/>
+      <line num="14" count="3" type="stmt"/>
+      <line num="15" count="3" type="stmt"/>
+      <line num="19" count="0" type="stmt"/>
+      <line num="23" count="0" type="stmt"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="31" count="1" type="stmt"/>
+    </file>
+    <file name="SesionPoster.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\SesionPoster.js">
+      <metrics statements="7" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="11" count="0" type="stmt"/>
+      <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="18" count="0" type="stmt"/>
+      <line num="22" count="1" type="stmt"/>
+    </file>
+    <file name="SesionRegular.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\SesionRegular.js">
+      <metrics statements="7" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="9" count="0" type="stmt"/>
+      <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="14" count="0" type="stmt"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+    </file>
+    <file name="SesionWorkshop.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\SesionWorkshop.js">
+      <metrics statements="18" coveredstatements="6" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="1" type="stmt"/>
+      <line num="10" count="1" type="stmt"/>
+      <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="15" count="0" type="stmt"/>
+      <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="17" count="0" type="stmt"/>
+      <line num="22" count="0" type="stmt"/>
+      <line num="23" count="0" type="stmt"/>
+      <line num="25" count="0" type="stmt"/>
+      <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="33" count="0" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+    </file>
+    <file name="Usuario.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\Usuario.js">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <line num="5" count="17" type="stmt"/>
+      <line num="6" count="17" type="stmt"/>
+      <line num="7" count="17" type="stmt"/>
+      <line num="8" count="17" type="stmt"/>
+      <line num="9" count="17" type="stmt"/>
+      <line num="13" count="3" type="stmt"/>
+      <line num="17" count="2" type="stmt"/>
+    </file>
+    <file name="enums.js" path="C:\Users\ivan_\OneDrive\Desktop\Maestria\TECNICAS Y HERRAMIENTAS\TyH 2024\TyH2024-Tpfinal\src\models\enums.js">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <line num="1" count="2" type="stmt"/>
+      <line num="7" count="2" type="stmt"/>
+      <line num="12" count="2" type="stmt"/>
+      <line num="22" count="2" type="stmt"/>
+      <line num="28" count="2" type="stmt"/>
+    </file>
+  </project>
+</coverage>

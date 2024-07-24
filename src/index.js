@@ -1,5 +1,3 @@
-// index.js
-
 const Usuario = require('./models/Usuario');
 const Conferencia = require('./models/Conferencia');
 const ArticuloRegular = require('./models/ArticuloRegular');
@@ -8,8 +6,8 @@ const Revision = require('./models/Revision');
 const Rol = require('./models/Rol');
 const Bid = require('./models/Bid');
 const { TipoDeInteres, TipoSesion, EstadoArticulo, TipoArticulo } = require('./models/enums');
-const MetodoSeleccionCorteFijo = require('./patterns/MetodoSeleccionCorteFijo');
-const MetodoSeleccionMejores = require('./patterns/MetodoSeleccionMejores');
+const MetodoSeleccionCorteFijo = require('./strategies/MetodoSeleccionCorteFijo');
+const MetodoSeleccionMejores = require('./strategies/MetodoSeleccionMejores');
 
 // Ejemplo de uso
 

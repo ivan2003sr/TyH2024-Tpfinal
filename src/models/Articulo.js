@@ -1,34 +1,46 @@
-const { EstadoArticulo, TipoArticulo } = require('./enums');
+const { EstadoArticulo, TipoArticulo } = require("./enums");
 
 class Articulo {
-    constructor(titulo, urlArchivoAdjunto, tipo) {
-        this.titulo = titulo;
-        this.urlArchivoAdjunto = urlArchivoAdjunto;
-        this.estado = EstadoArticulo.RECEPCION;
-        this.cantidadRevisores = 0;
-        this.tipo = tipo;
-        this.observers = [];
-        this.autores = [];
+  constructor(titulo, urlArchivoAdjunto, tipo, autores, autorEncargado = null) {
+    if (!Array.isArray(autores) || autores.length === 0 || autores[0] === null) {
+      throw new Error("Debe haber al menos un autor válido.");
     }
+    this.titulo = titulo;
+    this.urlArchivoAdjunto = urlArchivoAdjunto;
+    this.estado = EstadoArticulo.RECEPCION;
+    this.cantidadRevisores = 0;
+    this.tipo = tipo;
+    this.observers = [];
+    this.autores = autores;
 
-    addObserver(observer) {
-        this.observers.push(observer);
+    if (autorEncargado && autores.includes(autorEncargado)) {
+      this.autorEncargado = autorEncargado;
+    } else if (autorEncargado) {
+        throw new Error("El autor encargado debe estar en la lista de autores.");
+    } else {
+        this.autorEncargado = autores[0];
     }
+  }
 
-    notifyObservers() {
-        this.observers.forEach(observer => observer.update(this));
-    }
+  addObserver(observer) {
+    this.observers.push(observer);
+  }
 
-    addAutor(autor) {
-        this.autores.push(autor);
-    }
+  notifyObservers() {
+    this.observers.forEach((observer) => observer.update(this));
+  }
 
-    setAutorEncargado(autor) {
-        this.autorEncargado = autor;
+  addAutor(autor) {
+    this.autores.push(autor);
+  }
+
+  setAutorEncargado(autor) {
+    if (this.autores.includes(autor)) {
+      this.autorEncargado = autor;
+    } else {
+      throw new Error("El autor encargado debe estar en la lista de autores.");
     }
+  }
 }
-
-
-
 
 module.exports = Articulo;

@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/ivan2003sr/TyH2024-Tpfinal/issues"
   },
-  "homepage": "https://github.com/ivan2003sr/TyH2024-Tpfinal#readme"
+  "homepage": "https://github.com/ivan2003sr/TyH2024-Tpfinal#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }
