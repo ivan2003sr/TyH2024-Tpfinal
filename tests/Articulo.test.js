@@ -1,5 +1,6 @@
 const ArticuloRegular = require('../src/models/ArticuloRegular');
 const ArticuloPoster = require('../src/models/ArticuloPoster');
+const Articulo = require('../src/models/Articulo');
 const Usuario = require('../src/models/Usuario');
 
 test('Crear un nuevo artículo regular con autores y autor encargado válido', () => {
@@ -69,7 +70,7 @@ test('Crear un nuevo artículo regular, luego agrega 2 observadores y 2 autores 
     articulo.addObserver(observador1);
     articulo.addObserver(observador2);
 
-    //articulo.notifyObservers();
+    articulo.notifyObservers();
 
     expect(articulo.autores.length).toBe(2);
     articulo.addAutor(nuevoAutor1);
@@ -84,4 +85,33 @@ test('Crear un nuevo artículo regular, luego agrega 2 observadores y 2 autores 
     expect(articulo.autores.length).toBe(4);
     expect(articulo.autores).toContain(nuevoAutor1);
     expect(articulo.autores).toContain(nuevoAutor2);
+
+    articulo.addAutor(nuevoAutor1);
+    expect(articulo.autores.length).toBe(4);
+});
+
+test('Crear un nuevo artículo poster. Luego se cambia el autor encargado. primero por uno válido, luego por uno no válido que causa excepción.', () => {
+    const autor1 = new Usuario('Carlos Pérez', 'UNLP', 'carlos@unlp.edu', 'password789');
+    const autor2 = new Usuario('Marta López', 'UNLP', 'marta@unlp.edu', 'password456');
+    const autor3 = new Usuario('Pedro Rodríguez', 'UNLP', 'pedro@unlp.edu', 'password123');
+    const autor4 = new Usuario('Juan Perez', 'UNLP', 'juan@unlp.edu', 'password555');
+    const articulo =  new ArticuloPoster('Título 2', 'http://archivo2.com', 'http://fuentes.com', [autor1, autor2, autor3]);
+
+    expect(articulo.autorEncargado.nombreCompleto).toBe('Carlos Pérez');
+
+    articulo.setAutorEncargado(autor2);
+
+    expect(articulo.autorEncargado.nombreCompleto).toBe('Marta López');
+    
+    expect(() => articulo.setAutorEncargado(autor4))
+    .toThrow('El autor encargado debe estar en la lista de autores.');
+    
+    expect(articulo.autorEncargado.nombreCompleto).toBe('Marta López');
+
+});
+
+test('Crear un nuevo artículo, lanza exception porque no se puede instanciar directamente. ', () => {
+    const autor1 = new Usuario('Carlos Pérez', 'UNLP', 'carlos@unlp.edu', 'password789');
+    expect(() => new Articulo('Título 2', 'http://archivo2.com', 'http://fuentes.com', [autor1]))
+    .toThrow('Cannot instantiate abstract class.');
 });

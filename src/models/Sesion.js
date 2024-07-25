@@ -1,5 +1,3 @@
-// Sesion.js
-
 const { TipoSesion } = require('./enums');
 
 class Sesion {
@@ -24,7 +22,7 @@ class Sesion {
     }
 
     addArticulo(articulo) {
-        this.articulos.push(articulo);
+        throw new Error("Abstract method!");
     }
 }
 

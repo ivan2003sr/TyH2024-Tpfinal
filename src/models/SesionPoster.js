@@ -1,5 +1,4 @@
-// SesionPoster.js
-
+const { TipoArticulo } = require('./enums');
 const Sesion = require('./Sesion');
 
 class SesionPoster extends Sesion {
@@ -7,7 +6,7 @@ class SesionPoster extends Sesion {
         super(tema, deadline, numeroMaximoArticulosAceptados, 'Poster');
     }
 
-    setMetodoSeleccion(metodo, tipoArticulo) {
+    setMetodoSeleccion(metodo) {
         this.metodoSeleccion = metodo;
     }
 
@@ -16,6 +15,14 @@ class SesionPoster extends Sesion {
             return this.metodoSeleccion.seleccionar(this.articulos);
         }
         return [];
+    }
+
+    addArticulo(articulo) {
+        if (articulo.tipo === TipoArticulo.POSTER){
+            this.articulos.push(articulo);
+        } else {
+            throw new Error("Sólo se pueden agregar artículos tipo Poster a esta sesión.")
+        }
     }
 }
 

@@ -1,7 +1,12 @@
 const { EstadoArticulo, TipoArticulo } = require("./enums");
 
 class Articulo {
-  constructor(titulo, urlArchivoAdjunto, tipo, autores, autorEncargado = null) {
+  constructor(titulo, urlArchivoAdjunto, tipo, autores, autorEncargado = null, puntaje = null) {
+
+    if (this.constructor === Articulo) {
+      throw new Error("Cannot instantiate abstract class.");
+  }
+
     if (!Array.isArray(autores) || autores.length === 0 || autores[0] === null) {
       throw new Error("Debe haber al menos un autor válido.");
     }
@@ -12,6 +17,7 @@ class Articulo {
     this.tipo = tipo;
     this.observers = [];
     this.autores = autores;
+    this.puntaje = puntaje;
 
     if (autorEncargado && autores.includes(autorEncargado)) {
       this.autorEncargado = autorEncargado;
@@ -31,7 +37,11 @@ class Articulo {
   }
 
   addAutor(autor) {
-    this.autores.push(autor);
+    if (autor && !this.autores.includes(autor)) {
+      this.autores.push(autor);
+  } else {
+    console.log("Autor agregado previamente.");
+  }
   }
 
   setAutorEncargado(autor) {

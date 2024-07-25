@@ -1,3 +1,4 @@
+const { TipoArticulo } = require('./enums');
 const Sesion = require('./Sesion');
 
 class SesionRegular extends Sesion {
@@ -5,7 +6,7 @@ class SesionRegular extends Sesion {
         super(tema, deadline, numeroMaximoArticulosAceptados, 'Regular');
     }
 
-    setMetodoSeleccion(metodo, tipoArticulo) {
+    setMetodoSeleccion(metodo) {
         this.metodoSeleccion = metodo;
     }
 
@@ -14,6 +15,14 @@ class SesionRegular extends Sesion {
             return this.metodoSeleccion.seleccionar(this.articulos);
         }
         return [];
+    }
+
+    addArticulo(articulo) {
+        if (articulo.tipo ===TipoArticulo.REGULAR) {
+            this.articulos.push(articulo);
+        } else {
+            throw new Error("Sólo se pueden agregar artículos tipo Regular a esta sesión.")
+        }
     }
 }
 

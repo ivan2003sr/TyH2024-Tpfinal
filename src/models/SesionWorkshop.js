@@ -6,31 +6,29 @@ const { TipoArticulo } = require('./enums');
 class SesionWorkshop extends Sesion {
     constructor(tema, deadline, numeroMaximoArticulosAceptados) {
         super(tema, deadline, numeroMaximoArticulosAceptados, 'Workshop');
-        this.metodoSeleccionRegular = null;
-        this.metodoSeleccionPoster = null;
+        this.metodoSeleccionPorTipo = {};
     }
 
     setMetodoSeleccion(metodo, tipoArticulo) {
-        if (tipoArticulo === TipoArticulo.REGULAR) {
-            this.metodoSeleccionRegular = metodo;
-        } else if (tipoArticulo === TipoArticulo.POSTER) {
-            this.metodoSeleccionPoster = metodo;
-        }
+        this.metodoSeleccionPorTipo[tipoArticulo] = metodo;
     }
 
     seleccionarArticulos() {
-        const regulares = this.articulos.filter(a => a.tipo === TipoArticulo.REGULAR);
-        const posters = this.articulos.filter(a => a.tipo === TipoArticulo.POSTER);
-
         let seleccionados = [];
-        if (this.metodoSeleccionRegular) {
-            seleccionados = seleccionados.concat(this.metodoSeleccionRegular.seleccionar(regulares));
+        for (let tipoArticulo in this.metodoSeleccionPorTipo) {
+            const metodo = this.metodoSeleccionPorTipo[tipoArticulo];
+            const articulosPorTipo = this.articulos.filter(articulo => articulo.tipo === tipoArticulo);
+            seleccionados = seleccionados.concat(metodo.seleccionar(articulosPorTipo));
         }
-        if (this.metodoSeleccionPoster) {
-            seleccionados = seleccionados.concat(this.metodoSeleccionPoster.seleccionar(posters));
-        }
-
         return seleccionados;
+    }
+
+    addArticulo(articulo) {
+        if (articulo.tipo === TipoArticulo.REGULAR || articulo.tipo === TipoArticulo.POSTER) {
+            this.articulos.push(articulo);
+        } else {
+            throw new Error("Sólo se pueden agregar artículos tipo Regular o Poster a esta sesión.");
+        }
     }
 }
 
