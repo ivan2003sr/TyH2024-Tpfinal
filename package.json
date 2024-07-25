@@ -1,0 +1,25 @@
+{
+  "name": "tyh2024-tpfinal",
+  "version": "1.0.0",
+  "description": "Trabajo práctico final de Técnicas y Herramientas, año 2024.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivan2003sr/TyH2024-Tpfinal.git"
+  },
+  "author": "Aguilar Ivan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivan2003sr/TyH2024-Tpfinal/issues"
+  },
+  "homepage": "https://github.com/ivan2003sr/TyH2024-Tpfinal#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
