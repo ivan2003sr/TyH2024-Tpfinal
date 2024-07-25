@@ -24,6 +24,7 @@ class SesionPoster extends Sesion {
             throw new Error("Sólo se pueden agregar artículos tipo Poster a esta sesión.")
         }
     }
+
 }
 
 module.exports = SesionPoster;

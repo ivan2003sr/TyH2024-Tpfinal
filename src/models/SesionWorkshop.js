@@ -1,27 +1,41 @@
-// SesionWorkshop.js
-
 const Sesion = require('./Sesion');
 const { TipoArticulo } = require('./enums');
 
 class SesionWorkshop extends Sesion {
     constructor(tema, deadline, numeroMaximoArticulosAceptados) {
         super(tema, deadline, numeroMaximoArticulosAceptados, 'Workshop');
-        this.metodoSeleccionPorTipo = {};
+    //    this.metodoSeleccionPorTipo = {};
+    this.metodoSeleccionRegulares = null;
+    this.metodoSeleccionPosters = null;
     }
 
-    setMetodoSeleccion(metodo, tipoArticulo) {
-        this.metodoSeleccionPorTipo[tipoArticulo] = metodo;
-    }
-
-    seleccionarArticulos() {
-        let seleccionados = [];
-        for (let tipoArticulo in this.metodoSeleccionPorTipo) {
-            const metodo = this.metodoSeleccionPorTipo[tipoArticulo];
-            const articulosPorTipo = this.articulos.filter(articulo => articulo.tipo === tipoArticulo);
-            seleccionados = seleccionados.concat(metodo.seleccionar(articulosPorTipo));
+    setMetodoSeleccion(metodoSeleccion, tipoArticulo) {
+        if (tipoArticulo === TipoArticulo.REGULAR) {
+          this.metodoSeleccionRegulares = metodoSeleccion;
+        } else if (tipoArticulo === TipoArticulo.POSTER) {
+          this.metodoSeleccionPosters = metodoSeleccion;
+        } else {
+          throw new Error("Tipo de artículo no soportado.");
         }
-        return seleccionados;
-    }
+      }
+
+      seleccionarArticulos() {
+        const articulosRegulares = this.articulos.filter(articulo => articulo.tipo === TipoArticulo.REGULAR);
+        const articulosPosters = this.articulos.filter(articulo => articulo.tipo === TipoArticulo.POSTER);
+    
+        let seleccionadosRegulares = [];
+        if (this.metodoSeleccionRegulares) {
+          seleccionadosRegulares = this.metodoSeleccionRegulares.seleccionar(articulosRegulares);
+        }
+    
+        let seleccionadosPosters = [];
+        if (this.metodoSeleccionPosters) {
+          seleccionadosPosters = this.metodoSeleccionPosters.seleccionar(articulosPosters);
+        }
+    
+        return [...seleccionadosRegulares, ...seleccionadosPosters];
+      }
+    
 
     addArticulo(articulo) {
         if (articulo.tipo === TipoArticulo.REGULAR || articulo.tipo === TipoArticulo.POSTER) {
@@ -30,6 +44,7 @@ class SesionWorkshop extends Sesion {
             throw new Error("Sólo se pueden agregar artículos tipo Regular o Poster a esta sesión.");
         }
     }
+
 }
 
 module.exports = SesionWorkshop;

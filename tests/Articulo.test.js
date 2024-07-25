@@ -2,6 +2,8 @@ const ArticuloRegular = require('../src/models/ArticuloRegular');
 const ArticuloPoster = require('../src/models/ArticuloPoster');
 const Articulo = require('../src/models/Articulo');
 const Usuario = require('../src/models/Usuario');
+const Autor = require('../src/models/Autor');
+const Revision = require('../src/models/Revision');
 
 test('Crear un nuevo artículo regular con autores y autor encargado válido', () => {
     const autor1 = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
@@ -115,3 +117,66 @@ test('Crear un nuevo artículo, lanza exception porque no se puede instanciar di
     expect(() => new Articulo('Título 2', 'http://archivo2.com', 'http://fuentes.com', [autor1]))
     .toThrow('Cannot instantiate abstract class.');
 });
+
+test('Crear un artículo regular con resumen de más de 300 palabras debería lanzar un error', () => {
+    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
+    const resumenLargo = 'Palabra '.repeat(301); // Crear un resumen con más de 300 palabras
+
+    expect(() => new ArticuloRegular('Título 1', 'http://archivo1.com', resumenLargo, [autor])).toThrow("El resumen no puede tener más de 300 palabras.");
+});
+
+test('Crear un artículo regular con resumen válido debería funcionar correctamente', () => {
+    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
+    const resumenValido = 'Palabra '.repeat(100); // Crear un resumen con exactamente 300 palabras
+
+    const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', resumenValido, [autor]);
+    expect(articulo.abstract.split(' ').length).toBeLessThanOrEqual(300);
+});
+
+test('Crear un artículo poster debería funcionar correctamente', () => {
+    const autor = new Autor('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
+
+    const articulo = new ArticuloPoster('Título 1', 'http://archivo1.com', "urlfuentes.com",[autor]);
+    expect(articulo.titulo).toBe('Título 1');
+    expect(articulo.urlArchivoAdjunto).toBe('http://archivo1.com');
+    expect(articulo.autores.length).toBe(1);
+    expect(articulo.autores[0]).toBe(autor);
+});
+
+test("No se pueden añadir más de 3 revisiones a un artículo", () => {
+    const autor = new Usuario("Ana Gómez", "UNLP", "ana@unlp.edu", "password456");
+    const articulo = new ArticuloRegular("Título 1", "http://archivo1.com", "Resumen del artículo 1", [autor], autor);
+  
+    const revision1 = new Revision('Buena calidad', 1, 'General');
+    const revision2 = new Revision('Excelente', 2, 'General');
+    const revision3 = new Revision('Aceptable', 3, 'General');
+    const revision4 = new Revision('Regular', 1, 'General');
+  
+    articulo.addRevision(revision1);
+    articulo.addRevision(revision2);
+    articulo.addRevision(revision3);
+  
+    expect(() => articulo.addRevision(revision4)).toThrow("No se pueden añadir más de 3 revisiones.");
+  });
+  
+  test("El puntaje final del artículo es el promedio de las revisiones", () => {
+    const autor = new Usuario("Ana Gómez", "UNLP", "ana@unlp.edu", "password456");
+    const articulo = new ArticuloRegular("Título 1", "http://archivo1.com", "Resumen del artículo 1", [autor], autor);
+  
+    const revision1 = new Revision('Buena calidad', 1, 'General');
+    const revision2 = new Revision('Excelente', 3, 'General');
+    const revision3 = new Revision('Aceptable', 2, 'General');
+  
+    articulo.addRevision(revision1);
+    articulo.addRevision(revision2);
+    articulo.addRevision(revision3);
+  
+    expect(articulo.puntaje).toBe(2); // Promedio de 1, 3 y 2
+  });
+
+  test("El puntaje debe ser null si no hay revisiones", () => {
+    const autor = new Usuario("Ana Gómez", "UNLP", "ana@unlp.edu", "password456");
+    const articulo = new ArticuloRegular("Título 1", "http://archivo1.com", "Resumen del artículo 1", [autor], autor);
+    articulo.calculatePuntaje();
+    expect(articulo.puntaje).toBeNull();
+  });

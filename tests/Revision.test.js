@@ -4,7 +4,7 @@ const { TipoDeInteres } = require('../src/models/enums');
 describe('Revision', () => {
     test('Debería crear una Revision con el texto, puntaje y tipo de interés especificados', () => {
         const texto = 'Este es un comentario de revisión.';
-        const puntaje = 5;
+        const puntaje = 3;
         const tipoDeInteres = TipoDeInteres.ALTO;
         const revision = new Revision(texto, puntaje, tipoDeInteres);
 

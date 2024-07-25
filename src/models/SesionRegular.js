@@ -24,6 +24,7 @@ class SesionRegular extends Sesion {
             throw new Error("Sólo se pueden agregar artículos tipo Regular a esta sesión.")
         }
     }
+
 }
 
 module.exports = SesionRegular;

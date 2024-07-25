@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">31.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/20</span>
+                <span class='fraction'>5/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">33.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/18</span>
+                <span class='fraction'>5/15</span>
             </div>
         
             
@@ -96,19 +96,17 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -116,7 +114,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,51 +124,42 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">// SesionWorkshop.js
-&nbsp;
-const Sesion = require('./Sesion');
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const Sesion = require('./Sesion');
 const { TipoArticulo } = require('./enums');
 &nbsp;
 class SesionWorkshop extends Sesion {
     constructor(tema, deadline, numeroMaximoArticulosAceptados) {
         super(tema, deadline, numeroMaximoArticulosAceptados, 'Workshop');
-        this.metodoSeleccionRegular = null;
-        this.metodoSeleccionPoster = null;
+        this.metodoSeleccionPorTipo = {};
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    se</span>tMetodoSeleccion(metodo, tipoArticulo) {
-<span class="cstat-no" title="statement not covered" >        if (tipoArticulo === TipoArticulo.REGULAR) {</span>
-<span class="cstat-no" title="statement not covered" >            this.metodoSeleccionRegular = metodo;</span>
-        } else <span class="cstat-no" title="statement not covered" >if (tipoArticulo === TipoArticulo.POSTER) {</span>
-<span class="cstat-no" title="statement not covered" >            this.metodoSeleccionPoster = metodo;</span>
-        }
+<span class="cstat-no" title="statement not covered" >        this.metodoSeleccionPorTipo[tipoArticulo] = metodo;</span>
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    se</span>leccionarArticulos() {
-        const regulares = <span class="cstat-no" title="statement not covered" >this.articulos.filter(<span class="fstat-no" title="function not covered" >a </span>=&gt; <span class="cstat-no" title="statement not covered" >a.tipo === TipoArticulo.REGULAR)</span>;</span>
-        const posters = <span class="cstat-no" title="statement not covered" >this.articulos.filter(<span class="fstat-no" title="function not covered" >a </span>=&gt; <span class="cstat-no" title="statement not covered" >a.tipo === TipoArticulo.POSTER)</span>;</span>
-&nbsp;
         let seleccionados = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >        if (this.metodoSeleccionRegular) {</span>
-<span class="cstat-no" title="statement not covered" >            seleccionados = seleccionados.concat(this.metodoSeleccionRegular.seleccionar(regulares));</span>
+<span class="cstat-no" title="statement not covered" >        for (let tipoArticulo in this.metodoSeleccionPorTipo) {</span>
+            const metodo = <span class="cstat-no" title="statement not covered" >this.metodoSeleccionPorTipo[tipoArticulo];</span>
+            const articulosPorTipo = <span class="cstat-no" title="statement not covered" >this.articulos.filter(<span class="fstat-no" title="function not covered" >ar</span>ticulo =&gt; <span class="cstat-no" title="statement not covered" >articulo.tipo === tipoArticulo)</span>;</span>
+<span class="cstat-no" title="statement not covered" >            seleccionados = seleccionados.concat(metodo.seleccionar(articulosPorTipo));</span>
         }
-<span class="cstat-no" title="statement not covered" >        if (this.metodoSeleccionPoster) {</span>
-<span class="cstat-no" title="statement not covered" >            seleccionados = seleccionados.concat(this.metodoSeleccionPoster.seleccionar(posters));</span>
-        }
-&nbsp;
 <span class="cstat-no" title="statement not covered" >        return seleccionados;</span>
     }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    ad</span>dArticulo(articulo) {
+<span class="cstat-no" title="statement not covered" >        if (articulo.tipo === TipoArticulo.REGULAR || articulo.tipo === TipoArticulo.POSTER) {</span>
+<span class="cstat-no" title="statement not covered" >            this.articulos.push(articulo);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            throw new Error("Sólo se pueden agregar artículos tipo Regular o Poster a esta sesión.");</span>
+        }
+    }
+&nbsp;
 }
 &nbsp;
 module.exports = SesionWorkshop;</pre></td></tr></table></pre>
@@ -178,7 +169,7 @@ module.exports = SesionWorkshop;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-24T20:50:32.073Z
+                at 2024-07-25T18:37:41.057Z
             </div>
         <script src="prettify.js"></script>
         <script>

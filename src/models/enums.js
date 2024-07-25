@@ -25,4 +25,14 @@ const TipoDeInteres = Object.freeze({
     NO_INTERESADO: 'NoInteresado'
 });
 
-module.exports = { TipoSesion, TipoArticulo, EstadoArticulo, TipoDeInteres };
+const EstadoSesion = {
+
+    RECEPCION: 'RECEPCION',
+    BIDDING: 'BIDDING',
+    ASIGNACION: 'ASIGNACION',
+    REVISION: 'REVISION',
+    SELECCION: 'SELECCION'
+
+};
+
+module.exports = { TipoSesion, TipoArticulo, EstadoArticulo, TipoDeInteres, EstadoSesion };
