@@ -21,7 +21,8 @@ class Articulo {
     this.observers = [];
     this.autores = autores;
     this.revisiones = [];
-   // this.puntaje = null;
+    this.bids = new Map();
+    this.revisores = [];
 
     if (autorEncargado && autores.includes(autorEncargado)) {
       this.autorEncargado = autorEncargado;

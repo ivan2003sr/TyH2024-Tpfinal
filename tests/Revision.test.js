@@ -34,4 +34,11 @@ describe('Revision', () => {
         expect(revision.puntaje).toBe(puntaje);
         expect(revision.tipoDeInteres).toBe(tipoDeInteres);
     });
+
+    test('Una revisión con un puntaje fuera del rango, debe dar error.', () => {
+        const texto = 'Comentario de revisión bajo.';
+        const puntaje = 4;
+        const tipoDeInteres = TipoDeInteres.BAJO;
+        expect(() => new Revision(texto, puntaje, tipoDeInteres)).toThrow('El puntaje debe estar en el rango de -3 a 3.');
+    });
 });

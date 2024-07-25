@@ -1,5 +1,5 @@
-const { TipoSesion } = require('./enums');
-const { EstadoSesion } = require('./enums'); 
+const { TipoDeInteres, EstadoSesion } = require('./enums');
+const Bid = require('./Bid');
 
 class Sesion {
     constructor(tema, deadline, numeroMaximoArticulosAceptados, tipo) {
@@ -13,6 +13,7 @@ class Sesion {
         this.articulos = [];
         this.metodoSeleccion = null;
         this.estado = EstadoSesion.RECEPCION;
+        this.revisores = []
     }
 
     setMetodoSeleccion(metodo, tipoArticulo) {
@@ -38,7 +39,7 @@ class Sesion {
         const bid = new Bid(tipoDeInteres);
         articulo.addBid(revisor, bid);
     }
-
+/*
     asignarRevisores() {
         if (this.estado !== EstadoSesion.ASIGNACION) {
             throw new Error("El proceso de asignación solo se puede realizar durante el estado de asignación.");
@@ -49,6 +50,32 @@ class Sesion {
             articulo.revisores = revisores;
         });
     }
+        */
+
+    asignarRevisores(articulo, revisores) {
+        if (this.estado !== EstadoSesion.ASIGNACION) {
+            throw new Error("El proceso de asignación solo se puede realizar durante el estado de asignación.");
+        }
+        if (!this.articulos.includes(articulo)) {
+            throw new Error("El artículo no está en la lista de artículos de la sesión.");
+        }
+        if (!Array.isArray(revisores) || revisores.length === 0) {
+            throw new Error("Debe proporcionar una lista de revisores.");
+        }
+        if (revisores.length > 3) {
+            throw new Error("No se pueden asignar más de 3 revisores a un artículo.");
+        }
+        // Verificar que los revisores están en la lista de revisores válidos para la sesión
+        revisores.forEach(revisor => {
+            if (!this.revisores.includes(revisor)) {
+                throw new Error(`El revisor ${revisor.nombreCompleto} no está en la lista de revisores válidos.`);
+            }
+        });
+        articulo.revisores = revisores;
+    }
+    
+
+    
 
     agregarRevision(articulo, revisor, revision) {
         if (this.estado !== EstadoSesion.REVISION) {

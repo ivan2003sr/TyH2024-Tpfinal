@@ -11,11 +11,6 @@ class Usuario {
         this.roles.push(rol);
     }
 
-    update(articulo) {
-
-        // Simulamos acá mandar una notificación al usuario.
-        console.log(`${this.nombreCompleto} ha recibido una notificación sobre el artículo: ${articulo.titulo}`);
-    }
 }
 
 module.exports = Usuario;
