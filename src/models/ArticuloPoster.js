@@ -1,11 +1,23 @@
-const Articulo = require('./Articulo');
-const { TipoArticulo } = require('./enums');
+const Articulo = require("./Articulo");
+const { TipoArticulo } = require("./enums");
 
 class ArticuloPoster extends Articulo {
-    constructor(titulo, urlArchivoAdjunto, urlFuentes, autores, autorEncargado = null) {
-        super(titulo, urlArchivoAdjunto, TipoArticulo.POSTER, autores, autorEncargado);
-        this.urlFuentes = urlFuentes;
-    }
+  constructor(
+    titulo,
+    urlArchivoAdjunto,
+    urlFuentes,
+    autores,
+    autorEncargado = null
+  ) {
+    super(
+      titulo,
+      urlArchivoAdjunto,
+      TipoArticulo.POSTER,
+      autores,
+      autorEncargado
+    );
+    this.urlFuentes = urlFuentes;
+  }
 }
 
-module.exports = ArticuloPoster
+module.exports = ArticuloPoster;

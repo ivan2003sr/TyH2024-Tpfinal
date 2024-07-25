@@ -10,7 +10,11 @@ const ArticuloPoster = require("../src/models/ArticuloPoster");
 const Articulo = require("../src/models/Articulo");
 const Usuario = require("../src/models/Usuario");
 const Revision = require("../src/models/Revision");
-const { TipoArticulo, EstadoSesion, TipoDeInteres } = require("../src/models/enums");
+const {
+  TipoArticulo,
+  EstadoSesion,
+  TipoDeInteres,
+} = require("../src/models/enums");
 
 describe("Sesiones", () => {
   test("No se puede instanciar la clase abstracta Sesion", () => {
@@ -45,166 +49,89 @@ describe("Sesiones", () => {
     );
   });
 
-  test('Cambiar estado de sesión', () => {
-    const sesion = new SesionRegular('Tema', '2024-12-01', 5);
+  test("Cambiar estado de sesión", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
     sesion.cambiarEstado(EstadoSesion.BIDDING);
     expect(sesion.estado).toBe(EstadoSesion.BIDDING);
-});
+  });
 
-test('Procesar bidding en estado incorrecto', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
+  test("Procesar bidding en estado incorrecto", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
 
-  expect(() => sesion.procesarBidding(autor, articulo, 'Interés'))
-      .toThrow('El proceso de bidding solo se puede realizar durante el estado de bidding.');
-});
+    expect(() => sesion.procesarBidding(autor, articulo, "Interés")).toThrow(
+      "El proceso de bidding solo se puede realizar durante el estado de bidding."
+    );
+  });
 
-test('Asignar revisores en estado incorrecto', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-  sesion.articulos.push(articulo);
+  test("Asignar revisores en estado incorrecto", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+    sesion.articulos.push(articulo);
 
-  expect(() => sesion.asignarRevisores())
-      .toThrow('El proceso de asignación solo se puede realizar durante el estado de asignación.');
-});
+    expect(() => sesion.asignarRevisores()).toThrow(
+      "El proceso de asignación solo se puede realizar durante el estado de asignación."
+    );
+  });
 
-test('Agregar revisión en estado incorrecto', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-  const revision = new Revision('Buena calidad', 1, 'General');
-  const interesado = TipoDeInteres.INTERESADO;
+  test("Agregar revisión en estado incorrecto", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+    const revision = new Revision("Buena calidad", 1, "General");
+    const interesado = TipoDeInteres.INTERESADO;
 
-  sesion.cambiarEstado(EstadoSesion.BIDDING);
-  sesion.procesarBidding(revisor, articulo, interesado);
-  expect(() => sesion.agregarRevision(articulo, revisor, revision))
-      .toThrow('El proceso de revisión solo se puede realizar durante el estado de revisión.');
-});
+    sesion.cambiarEstado(EstadoSesion.BIDDING);
+    sesion.procesarBidding(revisor, articulo, interesado);
+    expect(() => sesion.agregarRevision(articulo, revisor, revision)).toThrow(
+      "El proceso de revisión solo se puede realizar durante el estado de revisión."
+    );
+  });
 
-test('Procesar bidding y asignar revisores correctamente', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  sesion.cambiarEstado(EstadoSesion.BIDDING);
-
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-  sesion.articulos.push(articulo);
-  sesion.revisores = [revisor];
-
-  sesion.procesarBidding(revisor, articulo, 'Interés');
-  expect(articulo.bids.has(revisor)).toBe(true);
-
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.asignarRevisores(articulo, sesion.revisores);
-  expect(articulo.revisores).toContain(revisor);
-
-  sesion.cambiarEstado(EstadoSesion.REVISION);
-  const revision = new Revision('Buena calidad', 1, 'General');
-  sesion.agregarRevision(articulo, revisor, revision);
-  expect(articulo.revisiones).toContain(revision);
-});
-
-test('Agregar revisión con un revisor no asignado', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisorAsignado = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const revisorNoAsignado = new Usuario('Carlos Pérez', 'UNLP', 'carlos@unlp.edu', 'password789');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-  const revision = new Revision('Buena calidad', 1, 'General');
-  sesion.addArticulo(articulo);
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.revisores = [revisorAsignado];
-  sesion.asignarRevisores(articulo, sesion.revisores);
-  sesion.cambiarEstado(EstadoSesion.REVISION);
-  expect(() => sesion.agregarRevision(articulo, revisorNoAsignado, revision))
-  .toThrow('El revisor no está asignado a este artículo.');
-});
-
-test('Asignar revisores fuera del estado de asignación', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor1 = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-
-  sesion.articulos.push(articulo);
-  sesion.cambiarEstado(EstadoSesion.RECEPCION);
-
-  expect(() => sesion.asignarRevisores(articulo, [revisor1]))
-      .toThrow('El proceso de asignación solo se puede realizar durante el estado de asignación.');
-});
-
-test('Asignar revisores a un artículo no en la lista de artículos de la sesión', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor1 = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-  const articuloNoEnSesion = new ArticuloRegular('Título 2', 'http://archivo2.com', 'Resumen del artículo 2', [autor], autor);
-
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.articulos.push(articulo);
-
-  expect(() => sesion.asignarRevisores(articuloNoEnSesion, [revisor1]))
-      .toThrow('El artículo no está en la lista de artículos de la sesión.');
-});
-
-test('Asignar una lista vacía de revisores', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor1 = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.articulos.push(articulo);
-  sesion.revisores = [revisor1];
-
-  expect(() => sesion.asignarRevisores(articulo, []))
-      .toThrow('Debe proporcionar una lista de revisores.');
-});
-
-test('Asignar más de 3 revisores a un artículo', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor1 = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const revisor2 = new Usuario('Carlos Pérez', 'UNLP', 'carlos@unlp.edu', 'password789');
-  const revisor3 = new Usuario('Marta López', 'UNLP', 'marta@unlp.edu', 'password456');
-  const revisor4 = new Usuario('Juan Pérez', 'UNLP', 'juan@unlp.edu', 'password012');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.articulos.push(articulo);
-  sesion.revisores = [revisor1, revisor2, revisor3, revisor4];
-
-  expect(() => sesion.asignarRevisores(articulo, [revisor1, revisor2, revisor3, revisor4]))
-      .toThrow('No se pueden asignar más de 3 revisores a un artículo.');
-});
-
-test('Asignar revisores no válidos', () => {
-  const sesion = new SesionRegular('Tema', '2024-12-01', 5);
-  const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-  const revisor1 = new Usuario('Luis Fernández', 'UNLP', 'luis@unlp.edu', 'password123');
-  const revisorNoValido = new Usuario('Carlos Pérez', 'UNLP', 'carlos@unlp.edu', 'password789');
-  const articulo = new ArticuloRegular('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor);
-
-  sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-  sesion.articulos.push(articulo);
-  sesion.revisores = [revisor1];
-
-  expect(() => sesion.asignarRevisores(articulo, [revisorNoValido]))
-      .toThrow('El revisor Carlos Pérez no está en la lista de revisores válidos.');
-});
-
-});
-
-describe("Sesiones regulares", () => {
-
-  const sesion = new SesionRegular("Regular Session", "2024-12-01", 5);
-
-  test("Seleccionar artículos en una sesión regular usando una estrategia", () => {
-   
-   
+  test("Procesar bidding y asignar revisores correctamente", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    sesion.cambiarEstado(EstadoSesion.BIDDING);
 
     const autor = new Usuario(
       "Ana Gómez",
@@ -212,16 +139,303 @@ describe("Sesiones regulares", () => {
       "ana@unlp.edu",
       "password456"
     );
+    const revisor = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+    sesion.articulos.push(articulo);
+    sesion.revisores = [revisor];
 
-    const revision1 = new Revision('Buena calidad', 1, 'General');
-    const revision2 = new Revision('Excelente', 3, 'General');
-    const revision3 = new Revision('Aceptable', 2, 'General');
+    sesion.procesarBidding(revisor, articulo, "Interés");
+    expect(articulo.bids.has(revisor)).toBe(true);
 
-    const articulo1 = new ArticuloRegular("Título 1", "http://archivo1.com", "Resumen del artículo 1", [autor], autor, [revision1]);
-    const articulo2 = new ArticuloRegular("Título 2", "http://archivo2.com", "Resumen del artículo 2", [autor], autor, [revision2]);
-    const articulo3 = new ArticuloRegular("Título 3", "http://archivo3.com", "Resumen del artículo 3", [autor], autor, [revision3]);
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.asignarRevisores(articulo, sesion.revisores);
+    expect(articulo.revisores).toContain(revisor);
 
-    
+    sesion.cambiarEstado(EstadoSesion.REVISION);
+    const revision = new Revision("Buena calidad", 1, "General");
+    sesion.agregarRevision(articulo, revisor, revision);
+    expect(articulo.revisiones).toContain(revision);
+  });
+
+  test("Agregar revisión con un revisor no asignado", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisorAsignado = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const revisorNoAsignado = new Usuario(
+      "Carlos Pérez",
+      "UNLP",
+      "carlos@unlp.edu",
+      "password789"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+    const revision = new Revision("Buena calidad", 1, "General");
+    sesion.addArticulo(articulo);
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.revisores = [revisorAsignado];
+    sesion.asignarRevisores(articulo, sesion.revisores);
+    sesion.cambiarEstado(EstadoSesion.REVISION);
+    expect(() =>
+      sesion.agregarRevision(articulo, revisorNoAsignado, revision)
+    ).toThrow("El revisor no está asignado a este artículo.");
+  });
+
+  test("Asignar revisores fuera del estado de asignación", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor1 = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+
+    sesion.articulos.push(articulo);
+    sesion.cambiarEstado(EstadoSesion.RECEPCION);
+
+    expect(() => sesion.asignarRevisores(articulo, [revisor1])).toThrow(
+      "El proceso de asignación solo se puede realizar durante el estado de asignación."
+    );
+  });
+
+  test("Asignar revisores a un artículo no en la lista de artículos de la sesión", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor1 = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+    const articuloNoEnSesion = new ArticuloRegular(
+      "Título 2",
+      "http://archivo2.com",
+      "Resumen del artículo 2",
+      [autor],
+      autor
+    );
+
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.articulos.push(articulo);
+
+    expect(() =>
+      sesion.asignarRevisores(articuloNoEnSesion, [revisor1])
+    ).toThrow("El artículo no está en la lista de artículos de la sesión.");
+  });
+
+  test("Asignar una lista vacía de revisores", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor1 = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.articulos.push(articulo);
+    sesion.revisores = [revisor1];
+
+    expect(() => sesion.asignarRevisores(articulo, [])).toThrow(
+      "Debe proporcionar una lista de revisores."
+    );
+  });
+
+  test("Asignar más de 3 revisores a un artículo", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor1 = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const revisor2 = new Usuario(
+      "Carlos Pérez",
+      "UNLP",
+      "carlos@unlp.edu",
+      "password789"
+    );
+    const revisor3 = new Usuario(
+      "Marta López",
+      "UNLP",
+      "marta@unlp.edu",
+      "password456"
+    );
+    const revisor4 = new Usuario(
+      "Juan Pérez",
+      "UNLP",
+      "juan@unlp.edu",
+      "password012"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.articulos.push(articulo);
+    sesion.revisores = [revisor1, revisor2, revisor3, revisor4];
+
+    expect(() =>
+      sesion.asignarRevisores(articulo, [
+        revisor1,
+        revisor2,
+        revisor3,
+        revisor4,
+      ])
+    ).toThrow("No se pueden asignar más de 3 revisores a un artículo.");
+  });
+
+  test("Asignar revisores no válidos", () => {
+    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const revisor1 = new Usuario(
+      "Luis Fernández",
+      "UNLP",
+      "luis@unlp.edu",
+      "password123"
+    );
+    const revisorNoValido = new Usuario(
+      "Carlos Pérez",
+      "UNLP",
+      "carlos@unlp.edu",
+      "password789"
+    );
+    const articulo = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor
+    );
+
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.articulos.push(articulo);
+    sesion.revisores = [revisor1];
+
+    expect(() => sesion.asignarRevisores(articulo, [revisorNoValido])).toThrow(
+      "El revisor Carlos Pérez no está en la lista de revisores válidos."
+    );
+  });
+});
+
+describe("Sesiones regulares", () => {
+  const sesion = new SesionRegular("Regular Session", "2024-12-01", 5);
+
+  test("Seleccionar artículos en una sesión regular usando una estrategia", () => {
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+
+    const revision1 = new Revision("Buena calidad", 1, "General");
+    const revision2 = new Revision("Excelente", 3, "General");
+    const revision3 = new Revision("Aceptable", 2, "General");
+
+    const articulo1 = new ArticuloRegular(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor,
+      [revision1]
+    );
+    const articulo2 = new ArticuloRegular(
+      "Título 2",
+      "http://archivo2.com",
+      "Resumen del artículo 2",
+      [autor],
+      autor,
+      [revision2]
+    );
+    const articulo3 = new ArticuloRegular(
+      "Título 3",
+      "http://archivo3.com",
+      "Resumen del artículo 3",
+      [autor],
+      autor,
+      [revision3]
+    );
+
     sesion.addArticulo(articulo1);
     sesion.addArticulo(articulo2);
     sesion.addArticulo(articulo3);
@@ -270,7 +484,6 @@ describe("Sesiones regulares", () => {
       1
     );
 
-    
     sesion.addArticulo(articulo1);
     sesion.addArticulo(articulo2);
     sesion.addArticulo(articulo3);
@@ -278,7 +491,6 @@ describe("Sesiones regulares", () => {
     const seleccionados = sesion.seleccionarArticulos();
 
     expect(seleccionados.length).toBe(0);
-
   });
 
   test("No permitir agregar artículos de tipo Poster en una sesión regular", () => {
@@ -298,45 +510,91 @@ describe("Sesiones regulares", () => {
       3
     );
 
-    
     expect(() => sesion.addArticulo(articuloPoster)).toThrow(
       "Sólo se pueden agregar artículos tipo Regular a esta sesión."
     );
   });
-
 });
 
 describe("Sesiones tipo Poster", () => {
-  
-  test('Agregar artículos de tipo Poster', () => {
-    const sesion = new SesionPoster('Poster Session', '2024-12-01', 5);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-    const articuloPoster = new ArticuloPoster('Título Poster', 'http://archivo.com', 'Resumen del artículo', [autor], autor, 3);
+  test("Agregar artículos de tipo Poster", () => {
+    const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articuloPoster = new ArticuloPoster(
+      "Título Poster",
+      "http://archivo.com",
+      "Resumen del artículo",
+      [autor],
+      autor,
+      3
+    );
 
-    
     sesion.addArticulo(articuloPoster);
 
     expect(sesion.articulos.length).toBe(1);
     expect(sesion.articulos).toContain(articuloPoster);
   });
 
-  test('No permitir agregar artículos de tipo Regular', () => {
-    const sesion = new SesionPoster('Poster Session', '2024-12-01', 5);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-    const articuloRegular = new ArticuloRegular('Título Regular', 'http://archivo.com', 'Resumen del artículo', [autor], autor, 3);
+  test("No permitir agregar artículos de tipo Regular", () => {
+    const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articuloRegular = new ArticuloRegular(
+      "Título Regular",
+      "http://archivo.com",
+      "Resumen del artículo",
+      [autor],
+      autor,
+      3
+    );
 
-
-    expect(() => sesion.addArticulo(articuloRegular)).toThrow("Sólo se pueden agregar artículos tipo Poster a esta sesión.");
+    expect(() => sesion.addArticulo(articuloRegular)).toThrow(
+      "Sólo se pueden agregar artículos tipo Poster a esta sesión."
+    );
   });
 
-  test('Seleccionar artículos en una sesión de poster usando la estrategia de corte fijo', () => {
-    const sesion = new SesionPoster('Poster Session', '2024-12-01', 5);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-    const articulo1 = new ArticuloPoster('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor, 3);
-    const articulo2 = new ArticuloPoster('Título 2', 'http://archivo2.com', 'Resumen del artículo 2', [autor], autor, 2);
-    const articulo3 = new ArticuloPoster('Título 3', 'http://archivo3.com', 'Resumen del artículo 3', [autor], autor, 1);
+  test("Seleccionar artículos en una sesión de poster usando la estrategia de corte fijo", () => {
+    const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articulo1 = new ArticuloPoster(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor,
+      3
+    );
+    const articulo2 = new ArticuloPoster(
+      "Título 2",
+      "http://archivo2.com",
+      "Resumen del artículo 2",
+      [autor],
+      autor,
+      2
+    );
+    const articulo3 = new ArticuloPoster(
+      "Título 3",
+      "http://archivo3.com",
+      "Resumen del artículo 3",
+      [autor],
+      autor,
+      1
+    );
 
-    
     sesion.addArticulo(articulo1);
     sesion.addArticulo(articulo2);
     sesion.addArticulo(articulo3);
@@ -352,11 +610,30 @@ describe("Sesiones tipo Poster", () => {
     expect(seleccionados).not.toContain(articulo3);
   });
 
-  test('Seleccionar artículos sin estrategia retorna una lista vacía', () => {
-    const sesion = new SesionPoster('Poster Session', '2024-12-01', 5);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-    const articulo1 = new ArticuloPoster('Título 1', 'http://archivo1.com', 'Resumen del artículo 1', [autor], autor, 3);
-    const articulo2 = new ArticuloPoster('Título 2', 'http://archivo2.com', 'Resumen del artículo 2', [autor], autor, 2);
+  test("Seleccionar artículos sin estrategia retorna una lista vacía", () => {
+    const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articulo1 = new ArticuloPoster(
+      "Título 1",
+      "http://archivo1.com",
+      "Resumen del artículo 1",
+      [autor],
+      autor,
+      3
+    );
+    const articulo2 = new ArticuloPoster(
+      "Título 2",
+      "http://archivo2.com",
+      "Resumen del artículo 2",
+      [autor],
+      autor,
+      2
+    );
 
     sesion.addArticulo(articulo1);
     sesion.addArticulo(articulo2);
@@ -365,26 +642,56 @@ describe("Sesiones tipo Poster", () => {
 
     expect(seleccionados.length).toBe(0);
   });
-
 });
 
 describe("Sesiones tipo Workshop", () => {
+  test("Aceptar y seleccionar artículos regulares y de posters usando diferentes estrategias.", () => {
+    const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
 
-  test('Aceptar y seleccionar artículos regulares y de posters usando diferentes estrategias.', () => {
-    const sesion = new SesionWorkshop('Workshop Session', '2024-12-01', 10);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
+    const revision1 = new Revision("Buena calidad", 1, "General");
+    const revision2 = new Revision("Excelente", 3, "General");
+    const revision3 = new Revision("Aceptable", 2, "General");
+    const revision4 = new Revision("Aceptable", 3, "General");
 
-    const revision1 = new Revision('Buena calidad', 1, 'General');
-    const revision2 = new Revision('Excelente', 3, 'General');
-    const revision3 = new Revision('Aceptable', 2, 'General');
-    const revision4 = new Revision('Aceptable', 3, 'General');
+    const articuloRegular1 = new ArticuloRegular(
+      "Título Regular 1",
+      "http://archivo1.com",
+      "Resumen del artículo regular 1",
+      [autor],
+      autor,
+      [revision1]
+    );
+    const articuloRegular2 = new ArticuloRegular(
+      "Título Regular 2",
+      "http://archivo2.com",
+      "Resumen del artículo regular 2",
+      [autor],
+      autor,
+      [revision2]
+    );
+    const articuloPoster1 = new ArticuloPoster(
+      "Título Poster 1",
+      "http://archivo3.com",
+      "Resumen del artículo poster 1",
+      [autor],
+      autor,
+      [revision3]
+    );
+    const articuloPoster2 = new ArticuloPoster(
+      "Título Poster 2",
+      "http://archivo4.com",
+      "Resumen del artículo poster 2",
+      [autor],
+      autor,
+      [revision4]
+    );
 
-    const articuloRegular1 = new ArticuloRegular('Título Regular 1', 'http://archivo1.com', 'Resumen del artículo regular 1', [autor], autor, [revision1]);
-    const articuloRegular2 = new ArticuloRegular('Título Regular 2', 'http://archivo2.com', 'Resumen del artículo regular 2', [autor], autor, [revision2]);
-    const articuloPoster1 = new ArticuloPoster('Título Poster 1', 'http://archivo3.com', 'Resumen del artículo poster 1', [autor], autor, [revision3]);
-    const articuloPoster2 = new ArticuloPoster('Título Poster 2', 'http://archivo4.com', 'Resumen del artículo poster 2', [autor], autor, [revision4]);
-
-    
     sesion.addArticulo(articuloRegular1);
     sesion.addArticulo(articuloRegular2);
     sesion.addArticulo(articuloPoster1);
@@ -405,13 +712,30 @@ describe("Sesiones tipo Workshop", () => {
     expect(seleccionados).not.toContain(articuloPoster2);
   });
 
-
-  test('Seleccionar artículos sin estrategia de selección retorna una lista vacía.', () => {
-    
-    const sesion = new SesionWorkshop('Workshop Session', '2024-12-01', 10);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
-    const articuloRegular = new ArticuloRegular('Título Regular 1', 'http://archivo1.com', 'Resumen del artículo regular 1', [autor], autor, 3);
-    const articuloPoster = new ArticuloPoster('Título Poster 1', 'http://archivo2.com', 'Resumen del artículo poster 1', [autor], autor, 2);
+  test("Seleccionar artículos sin estrategia de selección retorna una lista vacía.", () => {
+    const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
+    const articuloRegular = new ArticuloRegular(
+      "Título Regular 1",
+      "http://archivo1.com",
+      "Resumen del artículo regular 1",
+      [autor],
+      autor,
+      3
+    );
+    const articuloPoster = new ArticuloPoster(
+      "Título Poster 1",
+      "http://archivo2.com",
+      "Resumen del artículo poster 1",
+      [autor],
+      autor,
+      2
+    );
 
     sesion.addArticulo(articuloRegular);
     sesion.addArticulo(articuloPoster);
@@ -421,33 +745,62 @@ describe("Sesiones tipo Workshop", () => {
     expect(seleccionados.length).toBe(0);
   });
 
-  test('No se pueden agregar artículos de tipo no permitido.', () => {
-    
-    const sesion = new SesionWorkshop('Workshop Session', '2024-12-01', 10);
-    const autor = new Usuario('Ana Gómez', 'UNLP', 'ana@unlp.edu', 'password456');
+  test("No se pueden agregar artículos de tipo no permitido.", () => {
+    const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
+    const autor = new Usuario(
+      "Ana Gómez",
+      "UNLP",
+      "ana@unlp.edu",
+      "password456"
+    );
 
     // Creación de un artículo de un tipo no permitido
     class MockArticuloNoPermitido extends Articulo {
-      constructor(titulo, urlArchivoAdjunto, abstract, autores, autorEncargado = null, puntaje = null) {
-        super(titulo, urlArchivoAdjunto, 'NoPermitido', autores, autorEncargado, puntaje);
+      constructor(
+        titulo,
+        urlArchivoAdjunto,
+        abstract,
+        autores,
+        autorEncargado = null,
+        puntaje = null
+      ) {
+        super(
+          titulo,
+          urlArchivoAdjunto,
+          "NoPermitido",
+          autores,
+          autorEncargado,
+          puntaje
+        );
         this.abstract = abstract;
       }
     }
 
-    const articuloNoPermitido = new MockArticuloNoPermitido('Título No Permitido', 'http://archivo5.com', 'Resumen del artículo no permitido', [autor], autor, 5);
+    const articuloNoPermitido = new MockArticuloNoPermitido(
+      "Título No Permitido",
+      "http://archivo5.com",
+      "Resumen del artículo no permitido",
+      [autor],
+      autor,
+      5
+    );
 
     const metodoSeleccion = new MetodoSeleccionCorteFijo(0.5);
-    expect(() => sesion.addArticulo(articuloNoPermitido)).toThrow("Sólo se pueden agregar artículos tipo Regular o Poster a esta sesión.");
-    expect(() => sesion.setMetodoSeleccion(metodoSeleccion, articuloNoPermitido)).toThrow("Tipo de artículo no soportado.");
-
+    expect(() => sesion.addArticulo(articuloNoPermitido)).toThrow(
+      "Sólo se pueden agregar artículos tipo Regular o Poster a esta sesión."
+    );
+    expect(() =>
+      sesion.setMetodoSeleccion(metodoSeleccion, articuloNoPermitido)
+    ).toThrow("Tipo de artículo no soportado.");
   });
 
-  test('Llamar a seleccionar en la clase abstracta debería arrojar un error', () => {
-    class SubclassMetodoSeleccion extends MetodoSeleccion { }
+  test("Llamar a seleccionar en la clase abstracta debería arrojar un error", () => {
+    class SubclassMetodoSeleccion extends MetodoSeleccion {}
 
     const metodoSeleccion = new SubclassMetodoSeleccion();
 
-    expect(() => metodoSeleccion.seleccionar([])).toThrow("Method 'seleccionar()' must be implemented.");
+    expect(() => metodoSeleccion.seleccionar([])).toThrow(
+      "Method 'seleccionar()' must be implemented."
+    );
   });
-
 });
