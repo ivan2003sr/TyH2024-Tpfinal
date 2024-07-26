@@ -1,21 +1,24 @@
 class Usuario {
-    constructor(nombreCompleto, afiliacion, email, contrasena) {
-        this.nombreCompleto = nombreCompleto;
-        this.afiliacion = afiliacion;
-        this.email = email;
-        this.contrasena = contrasena;
-        this.roles = [];
+  constructor(nombreCompleto, afiliacion, email, contrasena) {
+    if (this.constructor === Usuario) {
+      throw new Error("No se puede instanciar la clase Usuario directamente.");
     }
+    this.nombreCompleto = nombreCompleto;
+    this.afiliacion = afiliacion;
+    this.email = email;
+    this.contrasena = contrasena;
+    this.roles = [];
+  }
 
-    addRol(rol) {
-        this.roles.push(rol);
+  addRol(rol) {
+    if (!this.roles.includes(rol)) {
+      this.roles.push(rol);
     }
+  }
 
-    update(articulo) {
-
-        // Simulamos acá mandar una notificación al usuario.
-        console.log(`${this.nombreCompleto} ha recibido una notificación sobre el artículo: ${articulo.titulo}`);
-    }
+  removeRol(rolNombre) {
+    this.roles = this.roles.filter((rol) => rol !== rolNombre);
+  }
 }
 
 module.exports = Usuario;
