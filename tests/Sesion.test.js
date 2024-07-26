@@ -156,7 +156,7 @@ describe("Sesiones", () => {
     sesion.articulos.push(articulo);
     sesion.revisores = [revisor];
 
-    sesion.procesarBidding(revisor, articulo, "Interés");
+    sesion.procesarBidding(revisor, articulo, TipoDeInteres.INTERESADO);
     expect(articulo.bids.has(revisor)).toBe(true);
 
     sesion.cambiarEstado(EstadoSesion.ASIGNACION);
