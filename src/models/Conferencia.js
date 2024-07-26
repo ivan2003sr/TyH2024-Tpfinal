@@ -9,6 +9,8 @@ class Conferencia {
     this.fechaInicio = fechaInicio;
     this.fechaFin = fechaFin;
     this.sesiones = [];
+    this.chairs = [];
+    this.comitePrograma = [];
   }
 
   crearSesion(tipo) {
@@ -29,6 +31,23 @@ class Conferencia {
     this.sesiones.push(sesion);
     return sesion;
   }
+
+  agregarChair(chair) {
+    this.chairs.push(chair);
+  }
+
+  agregarRevisor(revisor) {
+    this.comitePrograma.push(revisor);
+  }
+
+  listarChairs() {
+    return this.chairs.map((chair) => chair.nombreCompleto);
+  }
+
+  listarComitePrograma() {
+    return this.comitePrograma.map((revisor) => revisor.nombreCompleto);
+  }
+  
 }
 
 module.exports = Conferencia;

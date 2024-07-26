@@ -1,11 +1,11 @@
 const Revisor = require("../src/models/Revisor");
-const Usuario = require("../src/models/Usuario");
+const Autor = require("../src/models/Autor");
 const ArticuloRegular = require("../src/models/ArticuloRegular");
-//const Revision = require('../src/models/Revision');
+
 
 describe("Revisor", () => {
   test("Un revisor puede realizar una revisión en un artículo", () => {
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -37,7 +37,7 @@ describe("Revisor", () => {
   });
 
   test("Las revisiones realizadas por el revisor se almacenan en su lista de revisiones", () => {
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -72,7 +72,7 @@ describe("Revisor", () => {
   });
 
   test("El artículo recibe la revisión realizada por el revisor", () => {
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -102,7 +102,7 @@ describe("Revisor", () => {
   });
 
   test("No se pueden añadir revisiones a un artículo si se han alcanzado 3 revisiones", () => {
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",

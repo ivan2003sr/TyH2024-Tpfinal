@@ -33,10 +33,17 @@ const EstadoSesion = {
   SELECCION: "SELECCION",
 };
 
+const Roles = {
+  REVISOR: "Revisor",
+  AUTOR: "Autor",
+  CHAIR: "Chair",
+};
+
 module.exports = {
   TipoSesion,
   TipoArticulo,
   EstadoArticulo,
   TipoDeInteres,
   EstadoSesion,
+  Roles,
 };

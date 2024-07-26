@@ -8,7 +8,8 @@ const MetodoSeleccion = require("../src/strategies/MetodoSeleccion");
 const ArticuloRegular = require("../src/models/ArticuloRegular");
 const ArticuloPoster = require("../src/models/ArticuloPoster");
 const Articulo = require("../src/models/Articulo");
-const Usuario = require("../src/models/Usuario");
+const Autor = require("../src/models/Autor");
+const Revisor = require("../src/models/Revisor");
 const Revision = require("../src/models/Revision");
 const {
   TipoArticulo,
@@ -57,7 +58,7 @@ describe("Sesiones", () => {
 
   test("Procesar bidding en estado incorrecto", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -78,7 +79,7 @@ describe("Sesiones", () => {
 
   test("Asignar revisores en estado incorrecto", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -100,13 +101,13 @@ describe("Sesiones", () => {
 
   test("Agregar revisión en estado incorrecto", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor = new Usuario(
+    const revisor = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
@@ -133,13 +134,13 @@ describe("Sesiones", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
     sesion.cambiarEstado(EstadoSesion.BIDDING);
 
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor = new Usuario(
+    const revisor = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
@@ -170,19 +171,19 @@ describe("Sesiones", () => {
 
   test("Agregar revisión con un revisor no asignado", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisorAsignado = new Usuario(
+    const revisorAsignado = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
       "password123"
     );
-    const revisorNoAsignado = new Usuario(
+    const revisorNoAsignado = new Revisor(
       "Carlos Pérez",
       "UNLP",
       "carlos@unlp.edu",
@@ -208,13 +209,13 @@ describe("Sesiones", () => {
 
   test("Asignar revisores fuera del estado de asignación", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor1 = new Usuario(
+    const revisor1 = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
@@ -238,13 +239,13 @@ describe("Sesiones", () => {
 
   test("Asignar revisores a un artículo no en la lista de artículos de la sesión", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor1 = new Usuario(
+    const revisor1 = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
@@ -275,13 +276,13 @@ describe("Sesiones", () => {
 
   test("Asignar una lista vacía de revisores", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor1 = new Usuario(
+    const revisor1 = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
@@ -306,31 +307,31 @@ describe("Sesiones", () => {
 
   test("Asignar más de 3 revisores a un artículo", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor1 = new Usuario(
+    const revisor1 = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
       "password123"
     );
-    const revisor2 = new Usuario(
+    const revisor2 = new Revisor(
       "Carlos Pérez",
       "UNLP",
       "carlos@unlp.edu",
       "password789"
     );
-    const revisor3 = new Usuario(
+    const revisor3 = new Revisor(
       "Marta López",
       "UNLP",
       "marta@unlp.edu",
       "password456"
     );
-    const revisor4 = new Usuario(
+    const revisor4 = new Revisor(
       "Juan Pérez",
       "UNLP",
       "juan@unlp.edu",
@@ -360,19 +361,19 @@ describe("Sesiones", () => {
 
   test("Asignar revisores no válidos", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
       "password456"
     );
-    const revisor1 = new Usuario(
+    const revisor1 = new Revisor(
       "Luis Fernández",
       "UNLP",
       "luis@unlp.edu",
       "password123"
     );
-    const revisorNoValido = new Usuario(
+    const revisorNoValido = new Revisor(
       "Carlos Pérez",
       "UNLP",
       "carlos@unlp.edu",
@@ -400,7 +401,7 @@ describe("Sesiones regulares", () => {
   const sesion = new SesionRegular("Regular Session", "2024-12-01", 5);
 
   test("Seleccionar artículos en una sesión regular usando una estrategia", () => {
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -453,7 +454,7 @@ describe("Sesiones regulares", () => {
 
   test("Seleccionar artículos en una sesión regular sin una estrategia", () => {
     const sesion = new SesionRegular("Regular Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -495,7 +496,7 @@ describe("Sesiones regulares", () => {
 
   test("No permitir agregar artículos de tipo Poster en una sesión regular", () => {
     const sesion = new SesionRegular("Regular Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -519,7 +520,7 @@ describe("Sesiones regulares", () => {
 describe("Sesiones tipo Poster", () => {
   test("Agregar artículos de tipo Poster", () => {
     const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -542,7 +543,7 @@ describe("Sesiones tipo Poster", () => {
 
   test("No permitir agregar artículos de tipo Regular", () => {
     const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -564,7 +565,7 @@ describe("Sesiones tipo Poster", () => {
 
   test("Seleccionar artículos en una sesión de poster usando la estrategia de corte fijo", () => {
     const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -612,7 +613,7 @@ describe("Sesiones tipo Poster", () => {
 
   test("Seleccionar artículos sin estrategia retorna una lista vacía", () => {
     const sesion = new SesionPoster("Poster Session", "2024-12-01", 5);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -647,7 +648,7 @@ describe("Sesiones tipo Poster", () => {
 describe("Sesiones tipo Workshop", () => {
   test("Aceptar y seleccionar artículos regulares y de posters usando diferentes estrategias.", () => {
     const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -714,7 +715,7 @@ describe("Sesiones tipo Workshop", () => {
 
   test("Seleccionar artículos sin estrategia de selección retorna una lista vacía.", () => {
     const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
@@ -747,7 +748,7 @@ describe("Sesiones tipo Workshop", () => {
 
   test("No se pueden agregar artículos de tipo no permitido.", () => {
     const sesion = new SesionWorkshop("Workshop Session", "2024-12-01", 10);
-    const autor = new Usuario(
+    const autor = new Autor(
       "Ana Gómez",
       "UNLP",
       "ana@unlp.edu",
