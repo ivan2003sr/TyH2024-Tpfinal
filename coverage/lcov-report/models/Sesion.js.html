@@ -149,12 +149,7 @@
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,28 +187,22 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -227,16 +216,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -245,94 +235,89 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { TipoDeInteres, EstadoSesion } = require('./enums');
-const Bid = require('./Bid');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { TipoDeInteres, EstadoSesion } = require("./enums");
+const Bid = require("./Bid");
 &nbsp;
 class Sesion {
-    constructor(tema, deadline, numeroMaximoArticulosAceptados, tipo) {
-        if (this.constructor === Sesion) {
-            throw new Error("Cannot instantiate abstract class");
-        }
-        this.tema = tema;
-        this.deadline = deadline;
-        this.numeroMaximoArticulosAceptados = numeroMaximoArticulosAceptados;
-        this.tipo = tipo;
-        this.articulos = [];
-        this.metodoSeleccion = null;
-        this.estado = EstadoSesion.RECEPCION;
-        this.revisores = []
+  constructor(tema, deadline, numeroMaximoArticulosAceptados, tipo) {
+    if (this.constructor === Sesion) {
+      throw new Error("Cannot instantiate abstract class");
     }
+    this.tema = tema;
+    this.deadline = deadline;
+    this.numeroMaximoArticulosAceptados = numeroMaximoArticulosAceptados;
+    this.tipo = tipo;
+    this.articulos = [];
+    this.metodoSeleccion = null;
+    this.estado = EstadoSesion.RECEPCION;
+    this.revisores = [];
+  }
 &nbsp;
-    setMetodoSeleccion(metodo, tipoArticulo) {
-        throw new Error("Abstract method!");
-    }
+  setMetodoSeleccion(metodo, tipoArticulo) {
+    throw new Error("Abstract method!");
+  }
 &nbsp;
-    seleccionarArticulos() {
-        throw new Error("Abstract method!");
-    }
+  seleccionarArticulos() {
+    throw new Error("Abstract method!");
+  }
 &nbsp;
-    addArticulo(articulo) {
-        throw new Error("Abstract method!");
-    }
+  addArticulo(articulo) {
+    throw new Error("Abstract method!");
+  }
 &nbsp;
-    cambiarEstado(nuevoEstado){
-        this.estado = nuevoEstado;
-    }
+  cambiarEstado(nuevoEstado) {
+    this.estado = nuevoEstado;
+  }
 &nbsp;
-    procesarBidding(revisor, articulo, tipoDeInteres) {
-        if (this.estado !== EstadoSesion.BIDDING) {
-            throw new Error("El proceso de bidding solo se puede realizar durante el estado de bidding.");
-        }
-        const bid = new Bid(tipoDeInteres);
-        articulo.addBid(revisor, bid);
+  procesarBidding(revisor, articulo, tipoDeInteres) {
+    if (this.estado !== EstadoSesion.BIDDING) {
+      throw new Error(
+        "El proceso de bidding solo se puede realizar durante el estado de bidding."
+      );
     }
-/*
-    asignarRevisores() {
-        if (this.estado !== EstadoSesion.ASIGNACION) {
-            throw new Error("El proceso de asignación solo se puede realizar durante el estado de asignación.");
-        }
-        this.articulos.forEach(articulo =&gt; {
-            let revisores = Array.from(articulo.bids.keys());
-            revisores = revisores.slice(0, 3); // Asignamos un máximo de 3 revisores por artículo
-            articulo.revisores = revisores;
-        });
-    }
-        */
+    const bid = new Bid(tipoDeInteres);
+    articulo.addBid(revisor, bid);
+  }
 &nbsp;
-    asignarRevisores(articulo, revisores) {
-        if (this.estado !== EstadoSesion.ASIGNACION) {
-            throw new Error("El proceso de asignación solo se puede realizar durante el estado de asignación.");
-        }
-        if (!this.articulos.includes(articulo)) {
-            throw new Error("El artículo no está en la lista de artículos de la sesión.");
-        }
-        if (!Array.isArray(revisores) || revisores.length === 0) {
-            throw new Error("Debe proporcionar una lista de revisores.");
-        }
-        if (revisores.length &gt; 3) {
-            throw new Error("No se pueden asignar más de 3 revisores a un artículo.");
-        }
-        // Verificar que los revisores están en la lista de revisores válidos para la sesión
-        revisores.forEach(revisor =&gt; {
-            if (!this.revisores.includes(revisor)) {
-                throw new Error(`El revisor ${revisor.nombreCompleto} no está en la lista de revisores válidos.`);
-            }
-        });
-        articulo.revisores = revisores;
+  asignarRevisores(articulo, revisores) {
+    if (this.estado !== EstadoSesion.ASIGNACION) {
+      throw new Error(
+        "El proceso de asignación solo se puede realizar durante el estado de asignación."
+      );
     }
-    
-&nbsp;
-    
-&nbsp;
-    agregarRevision(articulo, revisor, revision) {
-        if (this.estado !== EstadoSesion.REVISION) {
-            throw new Error("El proceso de revisión solo se puede realizar durante el estado de revisión.");
-        }
-        if (!articulo.revisores.includes(revisor)) {
-            throw new Error("El revisor no está asignado a este artículo.");
-        }
-        articulo.addRevision(revision);
+    if (!this.articulos.includes(articulo)) {
+      throw new Error(
+        "El artículo no está en la lista de artículos de la sesión."
+      );
     }
+    if (!Array.isArray(revisores) || revisores.length === 0) {
+      throw new Error("Debe proporcionar una lista de revisores.");
+    }
+    if (revisores.length &gt; 3) {
+      throw new Error("No se pueden asignar más de 3 revisores a un artículo.");
+    }
+    // Verificar que los revisores están en la lista de revisores válidos para la sesión
+    revisores.forEach((revisor) =&gt; {
+      if (!this.revisores.includes(revisor)) {
+        throw new Error(
+          `El revisor ${revisor.nombreCompleto} no está en la lista de revisores válidos.`
+        );
+      }
+    });
+    articulo.revisores = revisores;
+  }
+&nbsp;
+  agregarRevision(articulo, revisor, revision) {
+    if (this.estado !== EstadoSesion.REVISION) {
+      throw new Error(
+        "El proceso de revisión solo se puede realizar durante el estado de revisión."
+      );
+    }
+    if (!articulo.revisores.includes(revisor)) {
+      throw new Error("El revisor no está asignado a este artículo.");
+    }
+    articulo.addRevision(revision);
+  }
 }
 &nbsp;
 module.exports = Sesion;
@@ -343,7 +328,7 @@ module.exports = Sesion;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-25T21:17:36.432Z
+                at 2024-07-28T17:13:11.703Z
             </div>
         <script src="../prettify.js"></script>
         <script>

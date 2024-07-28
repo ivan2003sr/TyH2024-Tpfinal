@@ -1,7 +1,7 @@
-const Autor = require('./models/Autor');
+const Autor = require('./models/Usuarios/Autor');
 const Conferencia = require('./models/Conferencia');
-const ArticuloRegular = require('./models/ArticuloRegular');
-const ArticuloPoster = require('./models/ArticuloPoster');
+const ArticuloRegular = require('./models/Articulo/ArticuloRegular');
+const ArticuloPoster = require('./models/Articulo/ArticuloPoster');
 const { TipoDeInteres, TipoSesion, EstadoArticulo, TipoArticulo } = require('./models/enums');
 const MetodoSeleccionCorteFijo = require('./strategies/MetodoSeleccionCorteFijo');
 const MetodoSeleccionMejores = require('./strategies/MetodoSeleccionMejores');
@@ -19,8 +19,8 @@ sesion.setMetodoSeleccion(new MetodoSeleccionMejores(2), TipoArticulo.POSTER);
 const articulo1 = new ArticuloRegular("Título 1", "url1", "Abstract 1", [autor1]);
 const articulo2 = new ArticuloPoster("Título 2", "url2", "urlFuente2", [autor2]);
 
-articulo1.addAutor(autor1);
-articulo2.addAutor(autor2);
+articulo1.addAutor(autor2);
+articulo2.addAutor(autor1);
 
 sesion.addArticulo(articulo1);
 sesion.addArticulo(articulo2);

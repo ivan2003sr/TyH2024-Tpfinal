@@ -1,6 +1,6 @@
-const Revisor = require("../src/models/Revisor");
-const Autor = require("../src/models/Autor");
-const ArticuloRegular = require("../src/models/ArticuloRegular");
+const Revisor = require("../src/models/Usuarios/Revisor");
+const Autor = require("../src/models/Usuarios/Autor");
+const ArticuloRegular = require("../src/models/Articulo/ArticuloRegular");
 
 
 describe("Revisor", () => {

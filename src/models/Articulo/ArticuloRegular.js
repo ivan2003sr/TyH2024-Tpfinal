@@ -1,5 +1,5 @@
 const Articulo = require("./Articulo");
-const { TipoArticulo } = require("./enums");
+const { TipoArticulo } = require("../enums");
 
 class ArticuloRegular extends Articulo {
   constructor(

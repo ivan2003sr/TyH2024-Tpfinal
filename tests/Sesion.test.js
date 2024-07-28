@@ -1,15 +1,15 @@
-const Sesion = require("../src/models/Sesion");
-const SesionPoster = require("../src/models/SesionPoster");
-const SesionRegular = require("../src/models/SesionRegular");
-const SesionWorkshop = require("../src/models/SesionWorkshop");
+const Sesion = require("../src/models/Sesiones/Sesion");
+const SesionPoster = require("../src/models/Sesiones/SesionPoster");
+const SesionRegular = require("../src/models/Sesiones/SesionRegular");
+const SesionWorkshop = require("../src/models/Sesiones/SesionWorkshop");
 const MetodoSeleccionMejores = require("../src/strategies/MetodoSeleccionMejores");
 const MetodoSeleccionCorteFijo = require("../src/strategies/MetodoSeleccionCorteFijo");
 const MetodoSeleccion = require("../src/strategies/MetodoSeleccion");
-const ArticuloRegular = require("../src/models/ArticuloRegular");
-const ArticuloPoster = require("../src/models/ArticuloPoster");
-const Articulo = require("../src/models/Articulo");
-const Autor = require("../src/models/Autor");
-const Revisor = require("../src/models/Revisor");
+const ArticuloRegular = require("../src/models/Articulo/ArticuloRegular");
+const ArticuloPoster = require("../src/models/Articulo/ArticuloPoster");
+const Articulo = require("../src/models/Articulo/Articulo");
+const Autor = require("../src/models/Usuarios/Autor");
+const Revisor = require("../src/models/Usuarios/Revisor");
 const Revision = require("../src/models/Revision");
 const {
   TipoArticulo,

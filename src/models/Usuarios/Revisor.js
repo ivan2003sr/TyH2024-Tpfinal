@@ -1,6 +1,6 @@
 const Usuario = require("./Usuario");
-const Revision = require("./Revision");
-const { Roles } = require("./enums");
+const Revision = require("../Revision");
+const { Roles } = require("../enums");
 
 class Revisor extends Usuario {
   constructor(nombreCompleto, afiliacion, email, contrasena) {

@@ -1,4 +1,4 @@
-const { EstadoArticulo, TipoArticulo } = require("./enums");
+const { EstadoArticulo, TipoArticulo } = require("../enums");
 
 class Articulo {
   constructor(titulo, urlArchivoAdjunto, tipo, autores, autorEncargado = null) {

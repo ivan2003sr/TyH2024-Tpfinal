@@ -1,6 +1,6 @@
-const SesionRegular = require("./SesionRegular");
-const SesionWorkshop = require("./SesionWorkshop");
-const SesionPoster = require("./SesionPoster");
+const SesionRegular = require("./Sesiones/SesionRegular");
+const SesionWorkshop = require("./Sesiones/SesionWorkshop");
+const SesionPoster = require("./Sesiones/SesionPoster");
 const { TipoSesion } = require("./enums");
 
 class Conferencia {

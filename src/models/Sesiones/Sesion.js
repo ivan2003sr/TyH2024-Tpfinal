@@ -1,5 +1,5 @@
-const { TipoDeInteres, EstadoSesion } = require("./enums");
-const Bid = require("./Bid");
+const { TipoDeInteres, EstadoSesion } = require("../enums");
+const Bid = require("../Bid");
 
 class Sesion {
   constructor(tema, deadline, numeroMaximoArticulosAceptados, tipo) {
