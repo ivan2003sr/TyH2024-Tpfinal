@@ -20,3 +20,4 @@ Composite: La relación entre "Sesion" y "Articulo" donde una sesión puede cont
 a) Si autorEncargado no está especificado, se utiliza como encargado el primer autor de la lista.
 b) Si el autorEncargado está especificado pero no está en la lista de autores, lanza una excepción.
 c) Si el autorEcnargado está especificado y está en la lista de autores, se setea como autorEncargado.
+- Se agregó una lógica que se prefiere a un revisor que no expresó interés alguno vs a uno cuyo tipo de interés es "NO.INTERESADO".
