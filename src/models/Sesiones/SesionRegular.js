@@ -1,4 +1,4 @@
-const { TipoArticulo } = require("./enums");
+const { TipoArticulo } = require("../enums");
 const Sesion = require("./Sesion");
 
 class SesionRegular extends Sesion {

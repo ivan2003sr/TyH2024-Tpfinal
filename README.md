@@ -11,7 +11,11 @@ Sesión y sus sublcaes usan el método "setMetodoSeleccion(metodo: MetodoSelecci
 
 Factory: "Conferencia" actúa como una fábrica que crea instancias de "Sesion" utilizando el método crearSesion(tipo: TipoSesion)
 
-Composite: La relación entre "Sesion" y "Articulo" donde una sesión puede contener múltimples artículos y se puede manejar de manera uniforme.
+Composite: La relación entre "Sesion" y "Articulo" donde una sesión puede contener múltiples artículos y se puede manejar de manera uniforme.
+
+Abstract Factory: en crearSesion de la clase Conferencia, crea una fábrica abstracta para la creación de diferentes tipos de sesiones (SesionRegular, SesionWorkshop, SesionPoster). Esto permite crear instancias en una lógica de selección.
+
+Template Method: La clase base "Sesion" define la estructura general y las sublcases ("SesionPoster", "SesionRegular", "SesionWorkshop") lo implementas sin cambiar la estructura.
 
 
 # Consideraciones agregadas que no figuran en la consigna:
@@ -20,3 +24,4 @@ Composite: La relación entre "Sesion" y "Articulo" donde una sesión puede cont
 a) Si autorEncargado no está especificado, se utiliza como encargado el primer autor de la lista.
 b) Si el autorEncargado está especificado pero no está en la lista de autores, lanza una excepción.
 c) Si el autorEcnargado está especificado y está en la lista de autores, se setea como autorEncargado.
+- Se agregó una lógica que se prefiere a un revisor que no expresó interés alguno vs a uno cuyo tipo de interés es "NO.INTERESADO".

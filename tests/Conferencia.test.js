@@ -1,10 +1,10 @@
 const Conferencia = require("../src/models/Conferencia");
-const SesionRegular = require("../src/models/SesionRegular");
-const SesionWorkshop = require("../src/models/SesionWorkshop");
-const SesionPoster = require("../src/models/SesionPoster");
+const SesionRegular = require("../src/models/Sesiones/SesionRegular");
+const SesionWorkshop = require("../src/models/Sesiones/SesionWorkshop");
+const SesionPoster = require("../src/models/Sesiones/SesionPoster");
 const { TipoSesion } = require("../src/models/enums");
-const Chair = require("../src/models/Chair");
-const Revisor = require("../src/models/Revisor");
+const Chair = require("../src/models/Usuarios/Chair");
+const Revisor = require("../src/models/Usuarios/Revisor");
 
 describe("Conferencia", () => {
   test("Crear una sesión regular", () => {

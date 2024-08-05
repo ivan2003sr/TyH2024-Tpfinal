@@ -1,11 +1,11 @@
 const Usuario = require("./Usuario");
-const { Roles } = require("./enums");
+const { Roles } = require("../enums");
 
-class Autor extends Usuario {
+class Chair extends Usuario {
   constructor(nombreCompleto, afiliacion, email, contrasena) {
     super(nombreCompleto, afiliacion, email, contrasena);
-    this.addRol(Roles.AUTOR);
+    this.addRol(Roles.CHAIR);
   }
 }
 
-module.exports = Autor;
+module.exports = Chair;

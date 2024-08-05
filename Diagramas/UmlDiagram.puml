@@ -1,135 +1,214 @@
-@startuml ComfyChair 
+@startuml ComfyChair
 
-class Usuario {
+abstract class Usuario {
     - nombreCompleto: String
     - afiliacion: String
     - email: String
-    - contraseña: String
+    - contrasena: String
+    + Usuario(nombreCompleto: String, afiliacion: String, email: String, contrasena: String)
+    + addRol(rol: String): void
+    + removeRol(rolNombre: String): void
 }
 
-class Conferencia {
-    - nombre: String
-    - fechaInicio: Date
-    - fechaFin: Date
-    + crearSesion(tipo: TipoSesion): Sesion
+class Autor {
+    + Autor(nombreCompleto: String, afiliacion: String, email: String, contrasena: String)
 }
 
-abstract class Sesion {
-    - tema: String
-    - deadline: Date
-    - numeroMaximoArticulosAceptados: int
-    - tipo: TipoSesion
-    + setMetodoSeleccion(metodo: MetodoSeleccion, tipoArticulo: TipoArticulo): void
-    + seleccionarArticulos(): void
+class Chair {
+    + Chair(nombreCompleto: String, afiliacion: String, email: String, contrasena: String)
 }
 
-class SesionRegular extends Sesion {
-    + seleccionarArticulos(): void
-}
-
-class SesionWorkshop extends Sesion {
-    - metodoSeleccionRegular: MetodoSeleccion
-    - metodoSeleccionPoster: MetodoSeleccion
-    + setMetodoSeleccion(metodo: MetodoSeleccion, tipo: TipoArticulo): void
-    + seleccionarArticulos(): void
-}
-
-class SesionPoster extends Sesion {
-    + seleccionarArticulos(): void
-}
-
-class Articulo {
-    - titulo: String
-    - urlArchivoAdjunto: String
-    - estado: EstadoArticulo
-    - cantidadRevisores: int
-    - tipo: TipoArticulo
-    + addObserver(observer: Usuario): void
-    + notifyObservers(): void
-}
-
-enum EstadoArticulo {
-    Recepcion
-    Bidding
-    Asignacion
-    Revision
-    Seleccion
-    Aceptado
-    Rechazado
-}
-
-class ArticuloRegular extends Articulo {
-    - abstract: String
-}
-
-class Poster extends Articulo {
-    - urlFuentes: String
+class Revisor {
+    - revisiones: List<Revision>
+    + Revisor(nombreCompleto: String, afiliacion: String, email: String, contrasena: String)
+    + realizarRevision(articulo: Articulo, texto: String, puntaje: int, tipoDeInteres: TipoDeInteres): void
 }
 
 class Revision {
     - texto: String
     - puntaje: int
-    - tipoDeInteres : TipoDeInteres
+    - tipoDeInteres: TipoDeInteres
+    + Revision(texto: String, puntaje: int, tipoDeInteres: TipoDeInteres)
 }
 
-class Rol {
+enum Roles {
+    REVISOR
+    AUTOR
+    CHAIR
+}
+
+enum TipoDeInteres {
+    INTERESADO
+    QUIZAS
+    NO_INTERESADO
+}
+
+Usuario <|-- Autor : hereda
+Usuario <|-- Chair : hereda
+Usuario <|-- Revisor : hereda
+
+Revisor "1" *-- "0..*" Revision : realiza
+
+Usuario ..> Roles : usa
+Revision ..> TipoDeInteres : usa
+
+abstract class Articulo {
+    - titulo: String
+    - urlArchivoAdjunto: String
+    - estado: EstadoArticulo
+    - cantidadRevisores: int
+    - tipo: TipoArticulo
+    - observers: List<Observer>
+    - autores: List<Autor>
+    - revisiones: List<Revision>
+    - bids: Map<Revisor, Bid>
+    - revisores: List<Revisor>
+    - autorEncargado: Autor
+    + Articulo(titulo: String, urlArchivoAdjunto: String, tipo: TipoArticulo, autores: List<Autor>, autorEncargado: Autor)
+    + addObserver(observer: Observer): void
+    + notifyObservers(): void
+    + addAutor(autor: Autor): void
+    + setAutorEncargado(autor: Autor): void
+    + addBid(revisor: Revisor, bid: Bid): void
+    + addRevision(revision: Revision): void
+    + calculatePuntaje(): void
+}
+
+class ArticuloPoster {
+    - urlFuentes: String
+    + ArticuloPoster(titulo: String, urlArchivoAdjunto: String, urlFuentes: String, autores: List<Autor>, autorEncargado: Autor)
+}
+
+class ArticuloRegular {
+    - abstract: String
+    + ArticuloRegular(titulo: String, urlArchivoAdjunto: String, abstract: String, autores: List<Autor>, autorEncargado: Autor, revisiones: List<Revision>)
+}
+
+enum EstadoArticulo {
+    RECEPCION
+    BIDDING
+    ASIGNACION
+    REVISION
+    SELECCION
+    ACEPTADO
+    RECHAZADO
+}
+
+enum TipoArticulo {
+    REGULAR
+    POSTER
+}
+
+Articulo <|-- ArticuloPoster : hereda
+Articulo <|-- ArticuloRegular : hereda
+
+Articulo ..> EstadoArticulo : usa
+Articulo ..> TipoArticulo : usa
+
+class Sesion {
+    - tema: String
+    - deadline: Date
+    - numeroMaximoArticulosAceptados: int
     - tipo: String
+    - articulos: List<Articulo>
+    - metodoSeleccion: MetodoSeleccion
+    - estado: EstadoSesion
+    - revisores: List<Revisor>
+    + Sesion(tema: String, deadline: Date, numeroMaximoArticulosAceptados: int, tipo: String)
+    + setMetodoSeleccion(metodo: MetodoSeleccion, tipoArticulo: TipoArticulo): void
+    + seleccionarArticulos(): List<Articulo>
+    + addArticulo(articulo: Articulo): void
+    + cambiarEstado(nuevoEstado: EstadoSesion): void
+    + procesarBidding(revisor: Revisor, articulo: Articulo, tipoDeInteres: TipoDeInteres): void
+    + asignarRevisores(articulo: Articulo): void
+    + agregarRevision(articulo: Articulo, revisor: Revisor, revision: Revision): void
+}
+
+class SesionPoster {
+    + SesionPoster(tema: String, deadline: Date, numeroMaximoArticulosAceptados: int)
+    + setMetodoSeleccion(metodo: MetodoSeleccion): void
+    + seleccionarArticulos(): List<Articulo>
+    + addArticulo(articulo: Articulo): void
+}
+
+class SesionRegular {
+    + SesionRegular(tema: String, deadline: Date, numeroMaximoArticulosAceptados: int)
+    + setMetodoSeleccion(metodo: MetodoSeleccion): void
+    + seleccionarArticulos(): List<Articulo>
+    + addArticulo(articulo: Articulo): void
+}
+
+class SesionWorkshop {
+    - metodoSeleccionRegulares: MetodoSeleccion
+    - metodoSeleccionPosters: MetodoSeleccion
+    + SesionWorkshop(tema: String, deadline: Date, numeroMaximoArticulosAceptados: int)
+    + setMetodoSeleccion(metodoSeleccion: MetodoSeleccion, tipoArticulo: TipoArticulo): void
+    + seleccionarArticulos(): List<Articulo>
+    + addArticulo(articulo: Articulo): void
 }
 
 class Bid {
     - tipoDeInteres: TipoDeInteres
+    + Bid(tipoDeInteres: TipoDeInteres)
 }
 
-enum TipoDeInteres {
-    Interesado
-    Quizas
-    NoInteresado
+enum EstadoSesion {
+    RECEPCION
+    BIDDING
+    ASIGNACION
+    REVISION
+    SELECCION
 }
 
-interface MetodoSeleccion {
+Sesion <|-- SesionPoster : hereda
+Sesion <|-- SesionRegular : hereda
+Sesion <|-- SesionWorkshop : hereda
+
+Sesion ..> Bid : usa
+Sesion ..> EstadoSesion : usa
+Sesion ..> TipoArticulo : usa
+Sesion ..> TipoDeInteres : usa
+
+abstract class MetodoSeleccion {
     + seleccionar(articulos: List<Articulo>): List<Articulo>
 }
 
-class MetodoSeleccionCorteFijo implements MetodoSeleccion {
+class MetodoSeleccionCorteFijo {
     - corteFijo: float
+    + MetodoSeleccionCorteFijo(corteFijo: float)
     + seleccionar(articulos: List<Articulo>): List<Articulo>
 }
 
-class MetodoSeleccionMejores implements MetodoSeleccion {
-    - puntajeMinimo: int
+class MetodoSeleccionMejores {
+    - puntajeMinimo: float
+    + MetodoSeleccionMejores(puntajeMinimo: float)
     + seleccionar(articulos: List<Articulo>): List<Articulo>
 }
 
-enum TipoSesion {
-    Regular
-    Workshop
-    Poster
+MetodoSeleccion <|-- MetodoSeleccionCorteFijo : hereda
+MetodoSeleccion <|-- MetodoSeleccionMejores : hereda
+
+Sesion ..> MetodoSeleccion : usa
+SesionPoster ..> MetodoSeleccion : usa
+SesionRegular ..> MetodoSeleccion : usa
+SesionWorkshop ..> MetodoSeleccion : usa
+
+class Conferencia {
+    - nombre: String
+    - fechaInicio: Date
+    - fechaFin: Date
+    - sesiones: List<Sesion>
+    - chairs: List<Chair>
+    - comitePrograma: List<Revisor>
+    + crearSesion(tipo: TipoSesion): Sesion
+    + agregarChair(chair: Chair): void
+    + agregarRevisor(revisor: Revisor): void
+    + listarChairs(): List<String>
+    + listarComitePrograma(): List<String>
 }
 
-enum TipoArticulo {
-    Regular
-    Poster
-}
-
-Usuario "1" -- "0..*" Rol
-Conferencia "1" -- "0..*" Sesion : crea
-Sesion "1" -- "0..*" Articulo : contiene
-Articulo "0..*" -- "1..*" Usuario : Autores
-Articulo "1" -- "1" Usuario : AutorEncargado
-Articulo <|-- ArticuloRegular
-Articulo <|-- Poster
-Articulo "0..*" -- "0..*" Revision : revisadoPor
-Usuario "0..*" -- "0..*" Revision : realiza
-Articulo "1" -- "0..*" Bid : recibe
-Bid "0..*" -- "1" Usuario : ofrece
-Articulo "1" -- "3" Usuario : revisores
-Sesion *-- MetodoSeleccion : usa
-SesionWorkshop "1" -- "1" MetodoSeleccion : usaRegular
-SesionWorkshop "1" -- "1" MetodoSeleccion : usaPoster
-Articulo "1" -- "0..*" Usuario : observers
-Sesion "1" -- "1" TipoSesion
-Articulo "1" -- "1" TipoArticulo
-Revision "1" -- "1" EstadoArticulo
-Bid "1" -- "1" TipoDeInteres
+Conferencia "1" *-- "0..*" Sesion : contiene
+Conferencia "1" *-- "0..*" Chair : tiene
+Conferencia "1" *-- "0..*" Revisor : tiene
 
 @enduml

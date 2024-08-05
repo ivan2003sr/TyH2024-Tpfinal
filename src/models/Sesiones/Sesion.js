@@ -1,5 +1,5 @@
-const { TipoDeInteres, EstadoSesion } = require("./enums");
-const Bid = require("./Bid");
+const { TipoDeInteres, EstadoSesion } = require("../enums");
+const Bid = require("../Bid");
 
 class Sesion {
   constructor(tema, deadline, numeroMaximoArticulosAceptados, tipo) {
@@ -42,7 +42,7 @@ class Sesion {
     articulo.addBid(revisor, bid);
   }
 
-  asignarRevisores(articulo, revisores) {
+  asignarRevisores(articulo) {
     if (this.estado !== EstadoSesion.ASIGNACION) {
       throw new Error(
         "El proceso de asignación solo se puede realizar durante el estado de asignación."
@@ -53,21 +53,43 @@ class Sesion {
         "El artículo no está en la lista de artículos de la sesión."
       );
     }
-    if (!Array.isArray(revisores) || revisores.length === 0) {
-      throw new Error("Debe proporcionar una lista de revisores.");
-    }
-    if (revisores.length > 3) {
-      throw new Error("No se pueden asignar más de 3 revisores a un artículo.");
-    }
-    // Verificar que los revisores están en la lista de revisores válidos para la sesión
-    revisores.forEach((revisor) => {
-      if (!this.revisores.includes(revisor)) {
-        throw new Error(
-          `El revisor ${revisor.nombreCompleto} no está en la lista de revisores válidos.`
-        );
+
+    const interesados = [];
+    const quizas = [];
+    const noInteresados = [];
+    const noIndicados = [];
+
+    this.revisores.forEach((revisor) => {
+      const bid = articulo.bids.get(revisor);
+      if (bid) {
+        switch (bid.tipoDeInteres) {
+          case TipoDeInteres.INTERESADO:
+            interesados.push(revisor);
+            break;
+          case TipoDeInteres.QUIZAS:
+            quizas.push(revisor);
+            break;
+          case TipoDeInteres.NO_INTERESADO:
+            noInteresados.push(revisor);
+            break;
+        }
+      } else {
+        noIndicados.push(revisor);
       }
     });
-    articulo.revisores = revisores;
+
+    const seleccionados = [
+      ...interesados,
+      ...quizas,
+      ...noIndicados,
+      ...noInteresados,
+    ].slice(0, 3);
+
+    if (seleccionados.length < 3) {
+      throw new Error("El número mínimo de revisores para un artículo es de 3.");
+    }
+
+    articulo.revisores = seleccionados;
   }
 
   agregarRevision(articulo, revisor, revision) {

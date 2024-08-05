@@ -1,7 +1,7 @@
-const ArticuloRegular = require("../src/models/ArticuloRegular");
-const ArticuloPoster = require("../src/models/ArticuloPoster");
-const Articulo = require("../src/models/Articulo");
-const Autor = require("../src/models/Autor");
+const ArticuloRegular = require("../src/models/Articulo/ArticuloRegular");
+const ArticuloPoster = require("../src/models/Articulo/ArticuloPoster");
+const Articulo = require("../src/models/Articulo/Articulo");
+const Autor = require("../src/models/Usuarios/Autor");
 const Revision = require("../src/models/Revision");
 
 describe("ArticuloRegular", () => {

@@ -1,7 +1,7 @@
-const Usuario = require("../src/models/Usuario");
-const Revisor = require("../src/models/Revisor");
-const Autor = require("../src/models/Autor");
-const Chair = require("../src/models/Chair");
+const Usuario = require("../src/models/Usuarios/Usuario");
+const Revisor = require("../src/models/Usuarios/Revisor");
+const Autor = require("../src/models/Usuarios/Autor");
+const Chair = require("../src/models/Usuarios/Chair");
 
 
 describe("Usuario", () => {

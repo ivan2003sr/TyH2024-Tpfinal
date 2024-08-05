@@ -1,20 +1,23 @@
-const Sesion = require("../src/models/Sesion");
-const SesionPoster = require("../src/models/SesionPoster");
-const SesionRegular = require("../src/models/SesionRegular");
-const SesionWorkshop = require("../src/models/SesionWorkshop");
+const Sesion = require("../src/models/Sesiones/Sesion");
+const SesionPoster = require("../src/models/Sesiones/SesionPoster");
+const SesionRegular = require("../src/models/Sesiones/SesionRegular");
+const SesionWorkshop = require("../src/models/Sesiones/SesionWorkshop");
 const MetodoSeleccionMejores = require("../src/strategies/MetodoSeleccionMejores");
 const MetodoSeleccionCorteFijo = require("../src/strategies/MetodoSeleccionCorteFijo");
 const MetodoSeleccion = require("../src/strategies/MetodoSeleccion");
-const ArticuloRegular = require("../src/models/ArticuloRegular");
-const ArticuloPoster = require("../src/models/ArticuloPoster");
-const Articulo = require("../src/models/Articulo");
-const Autor = require("../src/models/Autor");
-const Revisor = require("../src/models/Revisor");
+const ArticuloRegular = require("../src/models/Articulo/ArticuloRegular");
+const ArticuloPoster = require("../src/models/Articulo/ArticuloPoster");
+const Articulo = require("../src/models/Articulo/Articulo");
+const Autor = require("../src/models/Usuarios/Autor");
+const Revisor = require("../src/models/Usuarios/Revisor");
+const Conferencia = require("../src/models/Conferencia");
 const Revision = require("../src/models/Revision");
+
 const {
   TipoArticulo,
   EstadoSesion,
   TipoDeInteres,
+  TipoSesion,
 } = require("../src/models/enums");
 
 describe("Sesiones", () => {
@@ -130,83 +133,6 @@ describe("Sesiones", () => {
     );
   });
 
-  test("Procesar bidding y asignar revisores correctamente", () => {
-    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    sesion.cambiarEstado(EstadoSesion.BIDDING);
-
-    const autor = new Autor(
-      "Ana Gómez",
-      "UNLP",
-      "ana@unlp.edu",
-      "password456"
-    );
-    const revisor = new Revisor(
-      "Luis Fernández",
-      "UNLP",
-      "luis@unlp.edu",
-      "password123"
-    );
-    const articulo = new ArticuloRegular(
-      "Título 1",
-      "http://archivo1.com",
-      "Resumen del artículo 1",
-      [autor],
-      autor
-    );
-    sesion.articulos.push(articulo);
-    sesion.revisores = [revisor];
-
-    sesion.procesarBidding(revisor, articulo, TipoDeInteres.INTERESADO);
-    expect(articulo.bids.has(revisor)).toBe(true);
-
-    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-    sesion.asignarRevisores(articulo, sesion.revisores);
-    expect(articulo.revisores).toContain(revisor);
-
-    sesion.cambiarEstado(EstadoSesion.REVISION);
-    const revision = new Revision("Buena calidad", 1, "General");
-    sesion.agregarRevision(articulo, revisor, revision);
-    expect(articulo.revisiones).toContain(revision);
-  });
-
-  test("Agregar revisión con un revisor no asignado", () => {
-    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Autor(
-      "Ana Gómez",
-      "UNLP",
-      "ana@unlp.edu",
-      "password456"
-    );
-    const revisorAsignado = new Revisor(
-      "Luis Fernández",
-      "UNLP",
-      "luis@unlp.edu",
-      "password123"
-    );
-    const revisorNoAsignado = new Revisor(
-      "Carlos Pérez",
-      "UNLP",
-      "carlos@unlp.edu",
-      "password789"
-    );
-    const articulo = new ArticuloRegular(
-      "Título 1",
-      "http://archivo1.com",
-      "Resumen del artículo 1",
-      [autor],
-      autor
-    );
-    const revision = new Revision("Buena calidad", 1, "General");
-    sesion.addArticulo(articulo);
-    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-    sesion.revisores = [revisorAsignado];
-    sesion.asignarRevisores(articulo, sesion.revisores);
-    sesion.cambiarEstado(EstadoSesion.REVISION);
-    expect(() =>
-      sesion.agregarRevision(articulo, revisorNoAsignado, revision)
-    ).toThrow("El revisor no está asignado a este artículo.");
-  });
-
   test("Asignar revisores fuera del estado de asignación", () => {
     const sesion = new SesionRegular("Tema", "2024-12-01", 5);
     const autor = new Autor(
@@ -274,127 +200,6 @@ describe("Sesiones", () => {
     ).toThrow("El artículo no está en la lista de artículos de la sesión.");
   });
 
-  test("Asignar una lista vacía de revisores", () => {
-    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Autor(
-      "Ana Gómez",
-      "UNLP",
-      "ana@unlp.edu",
-      "password456"
-    );
-    const revisor1 = new Revisor(
-      "Luis Fernández",
-      "UNLP",
-      "luis@unlp.edu",
-      "password123"
-    );
-    const articulo = new ArticuloRegular(
-      "Título 1",
-      "http://archivo1.com",
-      "Resumen del artículo 1",
-      [autor],
-      autor
-    );
-
-    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-    sesion.articulos.push(articulo);
-    sesion.revisores = [revisor1];
-
-    expect(() => sesion.asignarRevisores(articulo, [])).toThrow(
-      "Debe proporcionar una lista de revisores."
-    );
-  });
-
-  test("Asignar más de 3 revisores a un artículo", () => {
-    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Autor(
-      "Ana Gómez",
-      "UNLP",
-      "ana@unlp.edu",
-      "password456"
-    );
-    const revisor1 = new Revisor(
-      "Luis Fernández",
-      "UNLP",
-      "luis@unlp.edu",
-      "password123"
-    );
-    const revisor2 = new Revisor(
-      "Carlos Pérez",
-      "UNLP",
-      "carlos@unlp.edu",
-      "password789"
-    );
-    const revisor3 = new Revisor(
-      "Marta López",
-      "UNLP",
-      "marta@unlp.edu",
-      "password456"
-    );
-    const revisor4 = new Revisor(
-      "Juan Pérez",
-      "UNLP",
-      "juan@unlp.edu",
-      "password012"
-    );
-    const articulo = new ArticuloRegular(
-      "Título 1",
-      "http://archivo1.com",
-      "Resumen del artículo 1",
-      [autor],
-      autor
-    );
-
-    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-    sesion.articulos.push(articulo);
-    sesion.revisores = [revisor1, revisor2, revisor3, revisor4];
-
-    expect(() =>
-      sesion.asignarRevisores(articulo, [
-        revisor1,
-        revisor2,
-        revisor3,
-        revisor4,
-      ])
-    ).toThrow("No se pueden asignar más de 3 revisores a un artículo.");
-  });
-
-  test("Asignar revisores no válidos", () => {
-    const sesion = new SesionRegular("Tema", "2024-12-01", 5);
-    const autor = new Autor(
-      "Ana Gómez",
-      "UNLP",
-      "ana@unlp.edu",
-      "password456"
-    );
-    const revisor1 = new Revisor(
-      "Luis Fernández",
-      "UNLP",
-      "luis@unlp.edu",
-      "password123"
-    );
-    const revisorNoValido = new Revisor(
-      "Carlos Pérez",
-      "UNLP",
-      "carlos@unlp.edu",
-      "password789"
-    );
-    const articulo = new ArticuloRegular(
-      "Título 1",
-      "http://archivo1.com",
-      "Resumen del artículo 1",
-      [autor],
-      autor
-    );
-
-    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
-    sesion.articulos.push(articulo);
-    sesion.revisores = [revisor1];
-
-    expect(() => sesion.asignarRevisores(articulo, [revisorNoValido])).toThrow(
-      "El revisor Carlos Pérez no está en la lista de revisores válidos."
-    );
-  });
 });
 
 describe("Sesiones regulares", () => {
@@ -804,4 +609,171 @@ describe("Sesiones tipo Workshop", () => {
       "Method 'seleccionar()' must be implemented."
     );
   });
+
+
+
+
+
+  test("Agregar un revisor y expresar interés en un artículo", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = conferencia.crearSesion(TipoSesion.REGULAR);
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    conferencia.agregarRevisor(revisor);
+    sesion.revisores.push(revisor);
+  
+    sesion.cambiarEstado(EstadoSesion.BIDDING);
+    sesion.procesarBidding(revisor, articulo, TipoDeInteres.INTERESADO);
+    
+    expect(articulo.bids.get(revisor).tipoDeInteres).toBe(TipoDeInteres.INTERESADO);
+  });
+  
+  test("Asignar revisores a un artículo basado en el interés.", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = conferencia.crearSesion(TipoSesion.REGULAR);
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor1 = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    const revisor2 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    const revisor3 = new Revisor("Revisor 3", "Afiliación", "revisor3@test.com", "password");
+    const revisor4 = new Revisor("Revisor 4", "Afiliación", "revisor4@test.com", "password");
+    const revisor5 = new Revisor("Revisor 5", "Afiliación", "revisor5@test.com", "password");
+    
+    conferencia.agregarRevisor(revisor1);
+    conferencia.agregarRevisor(revisor2);
+    conferencia.agregarRevisor(revisor3);
+    conferencia.agregarRevisor(revisor4);
+    conferencia.agregarRevisor(revisor5);
+    
+    sesion.revisores.push(revisor1);
+    sesion.revisores.push(revisor2);
+    sesion.revisores.push(revisor3);
+    sesion.revisores.push(revisor4);
+    sesion.revisores.push(revisor5);
+  
+    sesion.cambiarEstado(EstadoSesion.BIDDING);
+    sesion.procesarBidding(revisor1, articulo, TipoDeInteres.INTERESADO);
+    sesion.procesarBidding(revisor2, articulo, TipoDeInteres.QUIZAS);
+    sesion.procesarBidding(revisor3, articulo, TipoDeInteres.NO_INTERESADO);
+    sesion.procesarBidding(revisor4, articulo, TipoDeInteres.NO_INTERESADO);
+  
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.asignarRevisores(articulo);
+  
+    expect(articulo.revisores.length).toBe(3);
+    console.log(articulo.revisores);
+    expect(articulo.revisores).toContain(revisor1);
+    expect(articulo.revisores).toContain(revisor2);
+    expect(articulo.revisores).toContain(revisor5);
+  });
+  
+  test("No se pueden añadir más de 3 revisiones a un artículo", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = conferencia.crearSesion(TipoSesion.REGULAR);
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor1 = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    const revisor2 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    const revisor3 = new Revisor("Revisor 3", "Afiliación", "revisor3@test.com", "password");
+  
+    sesion.revisores.push(revisor1);
+    sesion.revisores.push(revisor2);
+    sesion.revisores.push(revisor3);
+    
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.asignarRevisores(articulo);
+    
+    sesion.cambiarEstado(EstadoSesion.REVISION);
+    const revision = { puntaje: 3 };
+    sesion.agregarRevision(articulo, revisor1, revision);
+    sesion.agregarRevision(articulo, revisor2, revision);
+    sesion.agregarRevision(articulo, revisor3, revision);
+    
+    expect(() => {
+      sesion.agregarRevision(articulo, revisor1, revision);
+    }).toThrow("No se pueden añadir más de 3 revisiones.");
+  });
+
+  test("No se pueden asignar menos de 3 revisores a un artículo", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = conferencia.crearSesion(TipoSesion.REGULAR);
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor1 = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    const revisor2 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    
+  
+    sesion.revisores.push(revisor1);
+    sesion.revisores.push(revisor2);
+  
+    
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    expect(() => {sesion.asignarRevisores(articulo);}).toThrow("El número mínimo de revisores para un artículo es de 3.");
+    
+  });
+
+
+  test("No se pueden asignar menos de 3 revisores a un artículo", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = conferencia.crearSesion(TipoSesion.REGULAR);
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor1 = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    const revisor2 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    
+  
+    sesion.revisores.push(revisor1);
+    sesion.revisores.push(revisor2);
+  
+    
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    expect(() => {sesion.asignarRevisores(articulo);}).toThrow("El número mínimo de revisores para un artículo es de 3.");
+    
+  });
+
+  test("Agregar revisión por un revisor no asignado al artículo lanza error", () => {
+    const conferencia = new Conferencia("Conferencia Test", new Date(), new Date());
+    const sesion = new SesionRegular("Tema Regular", new Date(), 10);
+    conferencia.sesiones.push(sesion);
+  
+    const articulo = new ArticuloRegular("Título Artículo", "url", "resumen", ["autor1"]);
+    sesion.addArticulo(articulo);
+  
+    const revisor1 = new Revisor("Revisor 1", "Afiliación", "revisor1@test.com", "password");
+    const revisor2 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    const revisor3 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+    const revisor4 = new Revisor("Revisor 2", "Afiliación", "revisor2@test.com", "password");
+  
+    conferencia.agregarRevisor(revisor1);
+    conferencia.agregarRevisor(revisor2);
+  
+    sesion.revisores.push(revisor1);
+    sesion.revisores.push(revisor2);
+    sesion.revisores.push(revisor3);
+    sesion.revisores.push(revisor4);
+
+    sesion.cambiarEstado(EstadoSesion.BIDDING);
+    sesion.procesarBidding(revisor1, articulo, TipoDeInteres.NO_INTERESADO);
+    sesion.procesarBidding(revisor2, articulo, TipoDeInteres.QUIZAS);
+    sesion.procesarBidding(revisor3, articulo, TipoDeInteres.INTERESADO);
+    sesion.procesarBidding(revisor4, articulo, TipoDeInteres.INTERESADO);
+  
+    sesion.cambiarEstado(EstadoSesion.ASIGNACION);
+    sesion.asignarRevisores(articulo);
+  
+    sesion.cambiarEstado(EstadoSesion.REVISION);
+  
+    const revision = new Revision("Esta es una revisión de prueba", 0);
+  
+    expect(() => {
+      sesion.agregarRevision(articulo, revisor1, revision);
+    }).toThrow("El revisor no está asignado a este artículo.");
+  });
+
 });

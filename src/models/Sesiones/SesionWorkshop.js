@@ -1,5 +1,5 @@
 const Sesion = require("./Sesion");
-const { TipoArticulo } = require("./enums");
+const { TipoArticulo } = require("../enums");
 
 class SesionWorkshop extends Sesion {
   constructor(tema, deadline, numeroMaximoArticulosAceptados) {
